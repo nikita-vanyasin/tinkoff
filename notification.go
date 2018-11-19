@@ -72,9 +72,11 @@ func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error)
 		return nil, errors.New("invalid token")
 	}
 
-	err = json.Unmarshal([]byte(notification.DataStr), &notification.Data)
-	if err != nil {
-		return nil, errors.New("can't unserialize DATA field: " + err.Error())
+	if notification.DataStr != "" {
+		err = json.Unmarshal([]byte(notification.DataStr), &notification.Data)
+		if err != nil {
+			return nil, errors.New("can't unserialize DATA field: " + err.Error())
+		}
 	}
 
 	return &notification, nil
