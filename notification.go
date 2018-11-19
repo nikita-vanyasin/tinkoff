@@ -26,7 +26,7 @@ type Notification struct {
 }
 
 func (n *Notification) GetValuesForToken() map[string]string {
-	return map[string]string{
+	var result = map[string]string{
 		"TerminalKey": n.TerminalKey,
 		"OrderId":     n.OrderID,
 		"Success":     serializeBool(n.Success),
@@ -34,12 +34,20 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		"PaymentId":   strconv.FormatUint(n.PaymentID, 10),
 		"ErrorCode":   n.ErrorCode,
 		"Amount":      strconv.FormatUint(n.Amount, 10),
-		"RebillId":    n.RebillID,
 		"CardId":      strconv.FormatUint(n.CardID, 10),
 		"Pan":         n.PAN,
-		"DATA":        n.DataStr,
 		"ExpDate":     n.ExpirationDate,
 	}
+
+	if n.DataStr != "" {
+		result["DATA"] = n.DataStr
+	}
+
+	if n.RebillID != "" {
+		result["RebillId"] = n.RebillID
+	}
+
+	return result
 }
 
 func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error) {
