@@ -6,14 +6,14 @@ API Docs: https://oplata.tinkoff.ru/landing/develop/documentation
 Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff)
 
 ##### Differences:
-0) support for API v2
-0) 'reflect' package is not used
-0) no additional error wrapping
-0) not all methods are implemented :)
+1) support for API v2
+1) 'reflect' package is not used
+1) no additional error wrapping
+1) not all methods are implemented :)
 
 ### Currently implemented features:
-0) Init [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Init)
-0) Parse notification body [(docs)](https://oplata.tinkoff.ru/landing/develop/notifications/http)
+1) Init [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Init)
+1) Parse notification body [(docs)](https://oplata.tinkoff.ru/landing/develop/notifications/http)
 
 
 ### Installation
