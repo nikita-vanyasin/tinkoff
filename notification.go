@@ -65,7 +65,9 @@ func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error)
 		return nil, errors.New("invalid terminal key")
 	}
 
-	token := generateToken(notification.GetValuesForToken())
+	valuesForTokenGen := notification.GetValuesForToken()
+	valuesForTokenGen["Password"] = c.password
+	token := generateToken(valuesForTokenGen)
 	if token != notification.Token {
 		return nil, errors.New("invalid token")
 	}
