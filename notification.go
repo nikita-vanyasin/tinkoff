@@ -10,7 +10,7 @@ import (
 
 type Notification struct {
 	TerminalKey    string            `json:"TerminalKey"` // Идентификатор магазина
-	OrderID        uint64            `json:"OrderId"`     // Номер заказа в системе Продавца
+	OrderID        string            `json:"OrderId"`     // Номер заказа в системе Продавца
 	Success        bool              `json:"Success"`     // Успешность операции
 	Status         string            `json:"Status"`      // Статус платежа (см. описание статусов операций)
 	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа
@@ -28,7 +28,7 @@ type Notification struct {
 func (n *Notification) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"TerminalKey": n.TerminalKey,
-		"OrderId":     strconv.FormatUint(n.OrderID, 10),
+		"OrderId":     n.OrderID,
 		"Success":     serializeBool(n.Success),
 		"Status":      n.Status,
 		"PaymentId":   strconv.FormatUint(n.PaymentID, 10),
