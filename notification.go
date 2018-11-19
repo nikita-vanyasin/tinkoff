@@ -13,11 +13,11 @@ type Notification struct {
 	OrderID        uint64            `json:"OrderId"`     // Номер заказа в системе Продавца
 	Success        bool              `json:"Success"`     // Успешность операции
 	Status         string            `json:"Status"`      // Статус платежа (см. описание статусов операций)
-	PaymentID      string            `json:"PaymentId"`   // Уникальный идентификатор платежа
+	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа
 	ErrorCode      string            `json:"ErrorCode"`   // Код ошибки, если произошла ошибка
 	Amount         uint64            `json:"Amount"`      // Текущая сумма транзакции в копейках
 	RebillID       string            `json:"RebillId"`    // Идентификатор рекуррентного платежа
-	CardID         string            `json:"CardId"`      // Идентификатор привязанной карты
+	CardID         uint64            `json:"CardId"`      // Идентификатор привязанной карты
 	PAN            string            `json:"Pan"`         // Маскированный номер карты
 	DataStr        string            `json:"DATA"`
 	Data           map[string]string `json:"-"`       // Дополнительные параметры платежа, переданные при создании заказа
@@ -31,11 +31,11 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		"OrderId":     strconv.FormatUint(n.OrderID, 10),
 		"Success":     serializeBool(n.Success),
 		"Status":      n.Status,
-		"PaymentId":   n.PaymentID,
+		"PaymentId":   strconv.FormatUint(n.PaymentID, 10),
 		"ErrorCode":   n.ErrorCode,
 		"Amount":      strconv.FormatUint(n.Amount, 10),
 		"RebillId":    n.RebillID,
-		"CardId":      n.CardID,
+		"CardId":      strconv.FormatUint(n.CardID, 10),
 		"Pan":         n.PAN,
 		"DATA":        n.DataStr,
 		"ExpDate":     n.ExpirationDate,
