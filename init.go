@@ -11,7 +11,7 @@ type InitRequest struct {
 
 	Amount      uint64            `json:"Amount"`
 	OrderID     string            `json:"OrderId"`
-	CustomerIP  string            `json:"IP"`
+	ClientIP    string            `json:"IP"`
 	Description string            `json:"Description"`
 	CustomerKey string            `json:"CustomerKey"`
 	Data        map[string]string `json:"DATA"`
@@ -26,7 +26,7 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"Amount":      strconv.FormatUint(i.Amount, 10),
 		"OrderId":     i.OrderID,
-		"IP":          i.CustomerIP,
+		"IP":          i.ClientIP,
 		"Description": i.Description,
 		"CustomerKey": i.CustomerKey,
 	}
