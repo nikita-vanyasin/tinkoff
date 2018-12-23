@@ -45,7 +45,7 @@ type InitResponse struct {
 	ErrorDetails string `json:"Details,omitempty"`    // Подробное описание ошибки
 }
 
-func (c *Client) Init(request *InitRequest) (status string, paymentID string, paymentURL string, err error) {
+func (c *Client) Init(request *InitRequest) (status string, paymentID uint64, paymentURL string, err error) {
 	response, err := c.postRequest("/Init", request)
 	if err != nil {
 		return
@@ -59,11 +59,25 @@ func (c *Client) Init(request *InitRequest) (status string, paymentID string, pa
 	}
 
 	status = res.Status
-	paymentID = res.PaymentID
 	paymentURL = res.PaymentURL
 
+	paymentID, err = strconv.ParseUint(res.PaymentID, 10, 0)
+	additionalErrInfo := ""
+	if err != nil {
+		additionalErrInfo = err.Error()
+	}
+
 	if !res.Success || res.ErrorCode != "0" || res.Status == StatusRejected {
-		err = errors.New(fmt.Sprintf("while init request: code %s - %s. %s", res.ErrorCode, res.ErrorMessage, res.ErrorDetails))
+		errMsg := fmt.Sprintf(
+			"while init request: code %s - %s. %s",
+			res.ErrorCode,
+			res.ErrorMessage,
+			res.ErrorDetails,
+		)
+		if additionalErrInfo != "" {
+			errMsg += ". also there was error while parsing PaymentID: " + additionalErrInfo
+		}
+		err = errors.New(errMsg)
 	}
 
 	return
