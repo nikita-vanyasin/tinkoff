@@ -30,7 +30,7 @@ type CancelResponse struct {
 	OrderID        string `json:"OrderId"`           // Номер заказа в системе Продавца
 	Success        bool   `json:"Success"`           // Успешность операции
 	Status         string `json:"Status"`            // Статус транзакции
-	PaymentID      uint64 `json:"PaymentId"`         // Уникальный идентификатор транзакции в системе Банка
+	PaymentID      string `json:"PaymentId"`         // Уникальный идентификатор транзакции в системе Банка
 	ErrorCode      string `json:"ErrorCode"`         // Код ошибки, «0» - если успешно
 	ErrorMessage   string `json:"Message,omitempty"` // Краткое описание ошибки
 	ErrorDetails   string `json:"Details,omitempty"` // Подробное описание ошибки
