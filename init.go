@@ -15,7 +15,7 @@ type InitRequest struct {
 	Description string            `json:"Description"`
 	CustomerKey string            `json:"CustomerKey"`
 	Data        map[string]string `json:"DATA"`
-	Receipt     Receipt           `json:"Receipt"`
+	Receipt     *Receipt          `json:"Receipt"`
 
 	// Not implemented:
 	// Recurrent

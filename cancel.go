@@ -9,10 +9,10 @@ import (
 type CancelRequest struct {
 	BaseRequest
 
-	PaymentID uint64  `json:"PaymentId"`
-	ClientIP  string  `json:"IP"`
-	Amount    uint64  `json:"Amount"`
-	Receipt   Receipt `json:"Receipt"`
+	PaymentID uint64   `json:"PaymentId"`
+	ClientIP  string   `json:"IP"`
+	Amount    uint64   `json:"Amount"`
+	Receipt   *Receipt `json:"Receipt"`
 }
 
 func (i *CancelRequest) GetValuesForToken() map[string]string {
