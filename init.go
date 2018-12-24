@@ -75,7 +75,7 @@ func (c *Client) Init(request *InitRequest) (status string, paymentID uint64, pa
 			res.ErrorDetails,
 		)
 		if additionalErrInfo != "" {
-			errMsg += ". also there was error while parsing PaymentID: " + additionalErrInfo
+			errMsg += ". also there was error while parsing PaymentId: " + additionalErrInfo
 		}
 		err = errors.New(errMsg)
 	}

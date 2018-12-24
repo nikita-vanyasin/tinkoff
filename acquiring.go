@@ -39,9 +39,10 @@ func (c *Client) postRequest(url string, request RequestInterface) (*http.Respon
 
 func (c *Client) secureRequest(request RequestInterface) {
 	request.SetTerminalKey(c.terminalKey)
-	request.SetPassword(c.password)
 
 	v := request.GetValuesForToken()
+	v["TerminalKey"] = c.terminalKey
+	v["Password"] = c.password
 	request.SetToken(generateToken(v))
 }
 
