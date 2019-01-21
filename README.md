@@ -14,6 +14,7 @@ Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff)
 ##### Currently implemented features:
 - Init [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Init)
 - Parse notification body [(docs)](https://oplata.tinkoff.ru/landing/develop/notifications/http)
+- Cancel [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Cancel)
 
 
 ## Installation
@@ -72,4 +73,9 @@ router.POST("/payment/notification/tinkoff", func(c *gin.Context) {
     
     c.String(http.StatusOK, a.client.GetNotificationSuccessResponse())
 }
+```
+
+##### Cancel (refund) (example using [gin](https://github.com/gin-gonic/gin)):
+```go
+status, originalAmount, newAmount, err := a.client.Cancel(req)
 ```
