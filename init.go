@@ -4,31 +4,37 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"time"
+)
+
+const (
+	RedirectDueDateFormat = time.RFC3339
 )
 
 type InitRequest struct {
 	BaseRequest
 
-	Amount      uint64            `json:"Amount"`
-	OrderID     string            `json:"OrderId"`
-	ClientIP    string            `json:"IP"`
-	Description string            `json:"Description"`
-	CustomerKey string            `json:"CustomerKey"`
-	Data        map[string]string `json:"DATA"`
-	Receipt     *Receipt          `json:"Receipt"`
+	Amount          uint64            `json:"Amount"`
+	OrderID         string            `json:"OrderId"`
+	ClientIP        string            `json:"IP"`
+	Description     string            `json:"Description"`
+	CustomerKey     string            `json:"CustomerKey"`
+	Data            map[string]string `json:"DATA"`
+	Receipt         *Receipt          `json:"Receipt"`
+	RedirectDueDate string            `json:"RedirectDueDate"`
 
-	// Not implemented:
+	// Not implemented yet:
 	// Recurrent
-	// RedirectDueDate
 }
 
 func (i *InitRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
-		"Amount":      strconv.FormatUint(i.Amount, 10),
-		"OrderId":     i.OrderID,
-		"IP":          i.ClientIP,
-		"Description": i.Description,
-		"CustomerKey": i.CustomerKey,
+		"Amount":          strconv.FormatUint(i.Amount, 10),
+		"OrderId":         i.OrderID,
+		"IP":              i.ClientIP,
+		"Description":     i.Description,
+		"CustomerKey":     i.CustomerKey,
+		"RedirectDueDate": i.RedirectDueDate,
 	}
 }
 
@@ -45,7 +51,18 @@ type InitResponse struct {
 	ErrorDetails string `json:"Details,omitempty"`    // Подробное описание ошибки
 }
 
+func validateDateFormat(dateStr string) error {
+	_, err := time.Parse(RedirectDueDateFormat, dateStr)
+	return err
+}
+
 func (c *Client) Init(request *InitRequest) (status string, paymentID uint64, paymentURL string, err error) {
+	err = validateDateFormat(request.RedirectDueDate)
+	if err != nil {
+		err = errors.New(fmt.Sprintf("while RedirectDueDate validation: %v", err))
+		return
+	}
+
 	response, err := c.postRequest("/Init", request)
 	if err != nil {
 		return
