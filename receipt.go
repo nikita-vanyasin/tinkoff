@@ -13,9 +13,15 @@ const (
 	VATNone = "none"   // без НДС
 	VAT0    = "vat0"   // НДС по ставке 0%
 	VAT10   = "vat10"  // НДС чека по ставке 10%
-	VAT18   = "vat18"  // НДС чека по ставке 18%
 	VAT110  = "vat110" // НДС чека по расчетной ставке 10/110
-	VAT118  = "vat118" // НДС чека по расчетной ставке 18/118
+
+	// Deprecated: since 1 Jan 2019 vat18 will be replaced automatically to vat20 on the side of Tinkoff bank. Use VAT20 instead
+	VAT18 = "vat18" // НДС чека по ставке 18%
+	VAT20 = "vat20" // НДС чека по ставке 20%
+
+	// Deprecated: since 1 Jan 2019 vat118 will be replaced automatically to vat120 on the side of Tinkoff bank. Use VAT120 instead
+	VAT118 = "vat118" // НДС чека по расчетной ставке 18/118
+	VAT120 = "vat120" // НДС чека по расчетной ставке 20/120
 )
 
 var taxationOptions = []string{
@@ -32,12 +38,14 @@ var vatOptions = []string{
 	VAT0,
 	VAT10,
 	VAT18,
+	VAT20,
 	VAT110,
 	VAT118,
+	VAT120,
 }
 
 type ReceiptItem struct {
-	Name     string // Наименование товара. Максимальная длина строки – 64 символа
+	Name     string // НVAT18аименование товара. Максимальная длина строки – 64 символа
 	Price    uint64 // Цена в копейках. *Целочисленное значение не более 10 знаков
 	Quantity string // Количество/вес: целая часть не более 8 знаков; дробная часть не более 3 знаков
 	Amount   uint64 // Сумма в копейках. Целочисленное значение не более 10 знаков
