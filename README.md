@@ -1,7 +1,7 @@
 
 ## Go client for Tinkoff Acquiring API (v2)
 
-API Docs: https://oplata.tinkoff.ru/landing/develop/documentation
+API Docs: https://oplata.tinkoff.ru/develop/api/payments/
 
 Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff)
 
@@ -11,10 +11,10 @@ Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff)
 - no additional error wrapping
 - not all methods are implemented :)
 
-##### Currently implemented features:
-- Init [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Init)
-- Parse notification body [(docs)](https://oplata.tinkoff.ru/landing/develop/notifications/http)
-- Cancel [(docs)](https://oplata.tinkoff.ru/landing/develop/documentation/Cancel)
+##### Currently implemented features: 
+- Init [(docs)](https://oplata.tinkoff.ru/develop/api/payments/init-description/)
+- Parse notification body [(docs)](https://oplata.tinkoff.ru/develop/api/notifications/setup-request/)
+- Cancel [(docs)](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 
 
 ## Installation
