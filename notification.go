@@ -35,9 +35,12 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		"PaymentId":   strconv.FormatUint(n.PaymentID, 10),
 		"ErrorCode":   n.ErrorCode,
 		"Amount":      strconv.FormatUint(n.Amount, 10),
-		"CardId":      strconv.FormatUint(n.CardID, 10),
 		"Pan":         n.PAN,
 		"ExpDate":     n.ExpirationDate,
+	}
+
+	if n.CardID != 0 {
+		result["CardId"] = strconv.FormatUint(n.CardID, 10)
 	}
 
 	if n.DataStr != "" {
