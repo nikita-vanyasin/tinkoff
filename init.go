@@ -14,14 +14,18 @@ const (
 type InitRequest struct {
 	BaseRequest
 
-	Amount          uint64            `json:"Amount"`
+	Amount          uint64            `json:"Amount,omitempty"`
 	OrderID         string            `json:"OrderId"`
-	ClientIP        string            `json:"IP"`
-	Description     string            `json:"Description"`
+	ClientIP        string            `json:"IP,omitempty"`
+	Description     string            `json:"Description,omitempty"`
+	Language        string            `json:"Language,omitempty"`
 	CustomerKey     string            `json:"CustomerKey"`
 	Data            map[string]string `json:"DATA"`
-	Receipt         *Receipt          `json:"Receipt"`
-	RedirectDueDate string            `json:"RedirectDueDate"`
+	Receipt         *Receipt          `json:"Receipt,omitempty"`
+	RedirectDueDate string            `json:"RedirectDueDate,omitempty"`
+	NotificationURL string            `json:"NotificationURL,omitempty"`
+	SuccessURL      string            `json:"SuccessURL,omitempty"`
+	FailURL         string            `json:"FailURL,omitempty"`
 
 	// Not implemented yet:
 	// Recurrent
@@ -33,8 +37,12 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 		"OrderId":         i.OrderID,
 		"IP":              i.ClientIP,
 		"Description":     i.Description,
+		"Language":        i.Language,
 		"CustomerKey":     i.CustomerKey,
 		"RedirectDueDate": i.RedirectDueDate,
+		"NotificationURL": i.NotificationURL,
+		"SuccessURL":      i.SuccessURL,
+		"FailURL":         i.FailURL,
 	}
 }
 
