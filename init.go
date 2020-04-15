@@ -14,21 +14,22 @@ const (
 type InitRequest struct {
 	BaseRequest
 
-	Amount          uint64            `json:"Amount,omitempty"`
-	OrderID         string            `json:"OrderId"`
-	ClientIP        string            `json:"IP,omitempty"`
-	Description     string            `json:"Description,omitempty"`
-	Language        string            `json:"Language,omitempty"`
-	CustomerKey     string            `json:"CustomerKey"`
-	Data            map[string]string `json:"DATA"`
-	Receipt         *Receipt          `json:"Receipt,omitempty"`
-	RedirectDueDate string            `json:"RedirectDueDate,omitempty"`
-	NotificationURL string            `json:"NotificationURL,omitempty"`
-	SuccessURL      string            `json:"SuccessURL,omitempty"`
-	FailURL         string            `json:"FailURL,omitempty"`
+	Amount          uint64            `json:"Amount,omitempty"`          // Сумма в копейках
+	OrderID         string            `json:"OrderId"`                   // Идентификатор заказа в системе продавца
+	ClientIP        string            `json:"IP,omitempty"`              // IP-адрес покупателя
+	Description     string            `json:"Description,omitempty"`     // Описание заказа
+	Language        string            `json:"Language,omitempty"`        // Язык платежной формы: ru или en
+	CustomerKey     string            `json:"CustomerKey"`               // Идентификатор покупателя в системе продавца. Передается вместе с параметром CardId. См. метод GetCardList
+	Data            map[string]string `json:"DATA"`                      // Дополнительные параметры платежа
+	Receipt         *Receipt          `json:"Receipt,omitempty"`         // Чек
+	RedirectDueDate string            `json:"RedirectDueDate,omitempty"` // Срок жизни ссылки
+	NotificationURL string            `json:"NotificationURL,omitempty"` // Адрес для получения http нотификаций
+	SuccessURL      string            `json:"SuccessURL,omitempty"`      // Страница успеха
+	FailURL         string            `json:"FailURL,omitempty"`         // Страница ошибки
 
 	// Not implemented yet:
 	// Recurrent
+	// PayType
 }
 
 func (i *InitRequest) GetValuesForToken() map[string]string {
