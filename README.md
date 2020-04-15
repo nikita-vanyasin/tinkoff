@@ -1,31 +1,22 @@
 
 ## Go client for Tinkoff Acquiring API (v2)
 
+### Warning: package API has no stable version yet.
+Feel free to contribute. [Roadmap to v1.0.0](#roadmap-to-v100)
+
 API Docs: https://oplata.tinkoff.ru/develop/api/payments/
 
-Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff)
-
-##### Differences:
+Based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff). Differences:
 - support for API v2
 - 'reflect' package is not used
 - no additional error wrapping
-- not all methods are implemented :)
-
-##### Currently implemented features: 
-- Init [(docs)](https://oplata.tinkoff.ru/develop/api/payments/init-description/)
-- Parse notification body [(docs)](https://oplata.tinkoff.ru/develop/api/notifications/setup-request/)
-- Cancel [(docs)](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
-
+- not all methods are implemented yet :)
 
 ## Installation
+Use go mod as usual or install the package with dep:
 ```bash
-# use dep
 dep ensure -add github.com/nikita-vanyasin/tinkoff
-
-# or go get:
-go get github.com/nikita-vanyasin/tinkoff
-``` 
-
+```
 
 ## Usage example
 
@@ -35,6 +26,7 @@ client := tinkoff.NewClient(terminalKey, terminalPassword)
 ```
 
 ##### Send Init request:
+Init [docs](https://oplata.tinkoff.ru/develop/api/payments/init-description/)
 ```go
 req := &tinkoff.InitRequest{
     Amount:      60000,
@@ -62,7 +54,9 @@ req := &tinkoff.InitRequest{
 status, paymentID, paymentURL, err := a.client.Init(req)
 ```
 
-##### Handle HTTP-notification (example using [gin](https://github.com/gin-gonic/gin)):
+##### Handle HTTP-notification:
+Parse notification body [(docs)](https://oplata.tinkoff.ru/develop/api/notifications/setup-request/).
+Example using [gin](https://github.com/gin-gonic/gin):
 ```go
 router.POST("/payment/notification/tinkoff", func(c *gin.Context) {
     notification, err := a.client.ParseNotification(c.Request.Body)
@@ -75,7 +69,18 @@ router.POST("/payment/notification/tinkoff", func(c *gin.Context) {
 }
 ```
 
-##### Cancel (refund) (example using [gin](https://github.com/gin-gonic/gin)):
+##### Cancel (refund):
+Cancel [docs](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 ```go
 status, originalAmount, newAmount, err := a.client.Cancel(req)
 ```
+
+### Roadmap to v1.0.0
+- Change public methods signature to return Response methods instead of separate values
+- Add examples folder
+- Accept time.Time object instead of formatted string
+- Add more validation (not sure about that one yet)
+
+### Also planned:
+- Init: implement support for Recurrent and PayType fields
+- Add support for more API methods
