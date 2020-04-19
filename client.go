@@ -23,6 +23,11 @@ func NewClient(terminalKey, password string) *Client {
 	}
 }
 
+// SetBaseURL allows to change default API endpoint
+func (c *Client) SetBaseURL(baseURL string) {
+	c.baseURL = baseURL
+}
+
 func (c *Client) decodeResponse(response *http.Response, result interface{}) error {
 	return json.NewDecoder(response.Body).Decode(result)
 }

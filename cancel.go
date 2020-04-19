@@ -9,7 +9,7 @@ import (
 type CancelRequest struct {
 	BaseRequest
 
-	PaymentID uint64   `json:"PaymentId"`         // Идентификатор платежа в системе банка
+	PaymentID string   `json:"PaymentId"`         // Идентификатор платежа в системе банка. По офф. документации это number(20), но фактически значение передается в виде строки
 	ClientIP  string   `json:"IP,omitempty"`      // IP-адрес покупателя
 	Amount    uint64   `json:"Amount,omitempty"`  // Сумма возврата в копейках
 	Receipt   *Receipt `json:"Receipt,omitempty"` // Чек
@@ -19,7 +19,7 @@ func (i *CancelRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"Amount":    strconv.FormatUint(i.Amount, 10),
 		"IP":        i.ClientIP,
-		"PaymentId": strconv.FormatUint(i.PaymentID, 10),
+		"PaymentId": i.PaymentID,
 	}
 }
 
@@ -36,26 +36,22 @@ type CancelResponse struct {
 	ErrorDetails   string `json:"Details,omitempty"` // Подробное описание ошибки
 }
 
-func (c *Client) Cancel(request *CancelRequest) (status string, originalAmount uint64, newAmount uint64, err error) {
+func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
 	response, err := c.postRequest("/Cancel", request)
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer response.Body.Close()
 
 	var res CancelResponse
 	err = c.decodeResponse(response, &res)
 	if err != nil {
-		return
+		return nil, err
 	}
-
-	status = res.Status
-	originalAmount = res.OriginalAmount
-	newAmount = res.NewAmount
 
 	if !res.Success || res.ErrorCode != "0" {
 		err = errors.New(fmt.Sprintf("while Cancel request: code %s - %s. %s", res.ErrorCode, res.ErrorMessage, res.ErrorDetails))
 	}
 
-	return
+	return &res, err
 }

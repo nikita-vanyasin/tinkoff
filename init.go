@@ -19,7 +19,7 @@ type InitRequest struct {
 	ClientIP        string            `json:"IP,omitempty"`              // IP-адрес покупателя
 	Description     string            `json:"Description,omitempty"`     // Описание заказа
 	Language        string            `json:"Language,omitempty"`        // Язык платежной формы: ru или en
-	CustomerKey     string            `json:"CustomerKey"`               // Идентификатор покупателя в системе продавца. Передается вместе с параметром CardId. См. метод GetCardList
+	CustomerKey     string            `json:"CustomerKey,omitempty"`     // Идентификатор покупателя в системе продавца. Передается вместе с параметром CardId. См. метод GetCardList
 	Data            map[string]string `json:"DATA"`                      // Дополнительные параметры платежа
 	Receipt         *Receipt          `json:"Receipt,omitempty"`         // Чек
 	RedirectDueDate string            `json:"RedirectDueDate,omitempty"` // Срок жизни ссылки
@@ -53,7 +53,7 @@ type InitResponse struct {
 	OrderID      string `json:"OrderId"`              // Номер заказа в системе Продавца
 	Success      bool   `json:"Success"`              // Успешность операции
 	Status       string `json:"Status"`               // Статус транзакции
-	PaymentID    string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка
+	PaymentID    string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка. По офф. документации это number(20), но фактически значение передается в виде строки.
 	PaymentURL   string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
 	ErrorCode    string `json:"ErrorCode"`            // Код ошибки, «0» - если успешно
 	ErrorMessage string `json:"Message,omitempty"`    // Краткое описание ошибки
@@ -68,32 +68,23 @@ func validateDateFormat(dateStr string) error {
 	return err
 }
 
-func (c *Client) Init(request *InitRequest) (status string, paymentID uint64, paymentURL string, err error) {
-	err = validateDateFormat(request.RedirectDueDate)
+func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
+	err := validateDateFormat(request.RedirectDueDate)
 	if err != nil {
 		err = errors.New(fmt.Sprintf("while RedirectDueDate validation: %v", err))
-		return
+		return nil, err
 	}
 
 	response, err := c.postRequest("/Init", request)
 	if err != nil {
-		return
+		return nil, err
 	}
 	defer response.Body.Close()
 
 	var res InitResponse
 	err = c.decodeResponse(response, &res)
 	if err != nil {
-		return
-	}
-
-	status = res.Status
-	paymentURL = res.PaymentURL
-
-	paymentID, err = strconv.ParseUint(res.PaymentID, 10, 0)
-	additionalErrInfo := ""
-	if err != nil {
-		additionalErrInfo = err.Error()
+		return nil, err
 	}
 
 	if !res.Success || res.ErrorCode != "0" || res.Status == StatusRejected {
@@ -103,11 +94,8 @@ func (c *Client) Init(request *InitRequest) (status string, paymentID uint64, pa
 			res.ErrorMessage,
 			res.ErrorDetails,
 		)
-		if additionalErrInfo != "" {
-			errMsg += ". also there was error while parsing PaymentId: " + additionalErrInfo
-		}
 		err = errors.New(errMsg)
 	}
 
-	return
+	return &res, err
 }

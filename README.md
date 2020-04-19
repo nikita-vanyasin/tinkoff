@@ -18,6 +18,9 @@ Use go mod as usual or install the package with dep:
 dep ensure -add github.com/nikita-vanyasin/tinkoff
 ```
 
+## Package doc
+https://pkg.go.dev/github.com/nikita-vanyasin/tinkoff
+
 ## Usage example
 
 ##### Create and initialize client with API credentials:
@@ -33,7 +36,7 @@ req := &tinkoff.InitRequest{
     OrderID:     "123456",
     CustomerKey: "123",
     Description: "some really useful product",
-    Receipt: tinkoff.Receipt{
+    Receipt: &tinkoff.Receipt{
         Email: "user@example.com",
         Items: []*tinkoff.ReceiptItem{
             {
@@ -51,7 +54,7 @@ req := &tinkoff.InitRequest{
         "custom data field 2": "0",
     },
 }
-status, paymentID, paymentURL, err := a.client.Init(req)
+res, err := a.client.Init(req)
 ```
 
 ##### Handle HTTP-notification:
@@ -72,14 +75,19 @@ router.POST("/payment/notification/tinkoff", func(c *gin.Context) {
 ##### Cancel (refund):
 Cancel [docs](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 ```go
-status, originalAmount, newAmount, err := a.client.Cancel(req)
+req := &tinkoff.CancelRequest{
+    PaymentID: "66623",
+    Amount: 60000,
+}
+res, err := a.client.Cancel(req)
 ```
 
 ### Roadmap to v1.0.0
-- Change public methods signature to return Response methods instead of separate values
-- Add examples folder
 - Accept time.Time object instead of formatted string
 - Add more validation (not sure about that one yet)
+- GetStatus
+- Resend
+- Improve usage documentation
 
 ### Also planned:
 - Init: implement support for Recurrent and PayType fields

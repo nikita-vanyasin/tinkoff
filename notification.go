@@ -14,7 +14,7 @@ type Notification struct {
 	OrderID        string            `json:"OrderId"`     // Номер заказа в системе Продавца
 	Success        bool              `json:"Success"`     // Успешность операции
 	Status         string            `json:"Status"`      // Статус платежа (см. описание статусов операций)
-	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа
+	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа. В случае нотификаций банк присылает число, а не строку, как в случае с Init или Cancel
 	ErrorCode      string            `json:"ErrorCode"`   // Код ошибки, если произошла ошибка
 	Amount         uint64            `json:"Amount"`      // Текущая сумма транзакции в копейках
 	RebillID       string            `json:"RebillId"`    // Идентификатор рекуррентного платежа
