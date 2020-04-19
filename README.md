@@ -1,13 +1,13 @@
 
-## Go client for Tinkoff Acquiring API (v2)
+# Go client for Tinkoff Acquiring API (v2)
 
 ### Warning: package has no stable version yet.
-Feel free to contribute.
-
 The package allows to send [token-signed](https://oplata.tinkoff.ru/develop/api/request-sign/) requests to Tinkoff Acquiring API and parse incoming HTTP notifications.
+
 Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
 
-### Contents
+
+## Contents
 - [Installation](#installation)
 - [Usage](#usage)
   - [Create client](#create-client)
@@ -20,25 +20,26 @@ Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
 - [References](#references)
 
 
-### Installation
-Use **go mod** as usual or install the package with dep:
+## Installation
+Use **go mod** as usual or install the package with **dep**:
 ```bash
 dep ensure -add github.com/nikita-vanyasin/tinkoff
 ```
 
-### Usage
+## Usage
 
 Automatically generated documentation can be found [here](https://pkg.go.dev/github.com/nikita-vanyasin/tinkoff).
-Some examples of usage can be found in package `*_test.go` files.
+
+Some examples of usage can be found in `*_test.go` files.
 
 
-##### Create client
+#### Create client
 Provide terminal key and password from terminal settings page.
 ```go
 client := tinkoff.NewClient(terminalKey, terminalPassword)
 ```
 
-##### Handle HTTP notification
+#### Handle HTTP notification
 [Docs](https://oplata.tinkoff.ru/develop/api/notifications/setup-request/).
 Example using [gin](https://github.com/gin-gonic/gin):
 ```go
@@ -48,13 +49,15 @@ router.POST("/payment/notification/tinkoff", func(c *gin.Context) {
         handleInternalError(c, err)
         return
     }
-    
+
+    // handle notification, e.g. update payment status in your DB
+
     // response well-formed body back on success. If you don't do this, the bank will send notification again later
     c.String(http.StatusOK, client.GetNotificationSuccessResponse())
 }
 ```
 
-##### Create payment
+#### Create payment
 [Init](https://oplata.tinkoff.ru/develop/api/payments/init-description/)
 ```go
 req := &tinkoff.InitRequest{
@@ -86,7 +89,7 @@ res, err := client.Init(req)
 fmt.Println("payment form url: %s", res.PaymentPageURL)
 ```
 
-##### Cancel or refund payment
+#### Cancel or refund payment
 [Cancel](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 ```go
 req := &tinkoff.CancelRequest{
@@ -125,18 +128,18 @@ if res.Status == tinkoff.StatusConfirmed {
   }
   ``` 
 
-### Roadmap to v1.0.0
+## Roadmap to v1.0.0
 - Resend
 - FinishAuthorize
 - Confirm
 - Submit3DSAuthorization
 
 
-### References
+## References
 The code in this repo based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff). Differences:
-- support for API v2
+- Support for API v2
 - 'reflect' package is not used
-- no additional error wrapping
+- No additional error wrapping
 
 More useful links:
 - Official [Tinkoff Acquiring API SDK for Android (java)](https://github.com/TinkoffCreditSystems/tinkoff-asdk-android)
