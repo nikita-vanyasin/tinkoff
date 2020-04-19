@@ -22,7 +22,7 @@ func assertNotError(tb testing.TB, err error) {
 	tb.Helper()
 
 	if err != nil {
-		tb.Fatal("error expected")
+		tb.Fatalf("expected no error, got %s", err.Error())
 	}
 }
 

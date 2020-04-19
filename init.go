@@ -4,12 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
-	"time"
 )
 
 const (
-	RedirectDueDateFormat = time.RFC3339
-
 	PayTypeOneStep  = "O"
 	PayTypeTwoSteps = "T"
 )
@@ -26,7 +23,7 @@ type InitRequest struct {
 	CustomerKey     string            `json:"CustomerKey,omitempty"`     // Идентификатор покупателя в системе продавца. Передается вместе с параметром CardId. См. метод GetCardList
 	Data            map[string]string `json:"DATA"`                      // Дополнительные параметры платежа
 	Receipt         *Receipt          `json:"Receipt,omitempty"`         // Чек
-	RedirectDueDate string            `json:"RedirectDueDate,omitempty"` // Срок жизни ссылки
+	RedirectDueDate Time              `json:"RedirectDueDate,omitempty"` // Срок жизни ссылки
 	NotificationURL string            `json:"NotificationURL,omitempty"` // Адрес для получения http нотификаций
 	SuccessURL      string            `json:"SuccessURL,omitempty"`      // Страница успеха
 	FailURL         string            `json:"FailURL,omitempty"`         // Страница ошибки
@@ -49,7 +46,7 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 		"Description":     i.Description,
 		"Language":        i.Language,
 		"CustomerKey":     i.CustomerKey,
-		"RedirectDueDate": i.RedirectDueDate,
+		"RedirectDueDate": i.RedirectDueDate.String(),
 		"NotificationURL": i.NotificationURL,
 		"SuccessURL":      i.SuccessURL,
 		"FailURL":         i.FailURL,
@@ -69,21 +66,7 @@ type InitResponse struct {
 	ErrorDetails string `json:"Details,omitempty"`    // Подробное описание ошибки
 }
 
-func validateDateFormat(dateStr string) error {
-	if dateStr == "" {
-		return nil
-	}
-	_, err := time.Parse(RedirectDueDateFormat, dateStr)
-	return err
-}
-
 func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
-	err := validateDateFormat(request.RedirectDueDate)
-	if err != nil {
-		err = errors.New(fmt.Sprintf("while RedirectDueDate validation: %v", err))
-		return nil, err
-	}
-
 	response, err := c.PostRequest("/Init", request)
 	if err != nil {
 		return nil, err

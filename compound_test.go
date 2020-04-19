@@ -14,11 +14,12 @@ func TestInitThenCancel(t *testing.T) {
 	// create new payment
 	orderID := strconv.FormatInt(time.Now().UnixNano(), 10)
 	initReq := &tinkoff.InitRequest{
-		Amount:      60000,
-		OrderID:     orderID,
-		CustomerKey: "123",
-		Description: "some really useful product",
-		PayType:     tinkoff.PayTypeTwoSteps,
+		Amount:          60000,
+		OrderID:         orderID,
+		CustomerKey:     "123",
+		Description:     "some really useful product",
+		PayType:         tinkoff.PayTypeTwoSteps,
+		RedirectDueDate: tinkoff.Time(time.Now().Add(4 * time.Hour * 24)), // ссылка истечет через 4 дня
 		Receipt: &tinkoff.Receipt{
 			Email: "user@example.com",
 			Items: []*tinkoff.ReceiptItem{
