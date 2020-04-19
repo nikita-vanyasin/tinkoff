@@ -31,9 +31,6 @@ type InitRequest struct {
 	SuccessURL      string            `json:"SuccessURL,omitempty"`      // Страница успеха
 	FailURL         string            `json:"FailURL,omitempty"`         // Страница ошибки
 	PayType         string            `json:"PayType,omitempty"`         // Тип оплаты. см. PayType*
-	// Not implemented yet:
-	// Recurrent
-	// PayType
 }
 
 func (i *InitRequest) SetIsRecurrent(r bool) {
@@ -87,7 +84,7 @@ func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
 		return nil, err
 	}
 
-	response, err := c.postRequest("/Init", request)
+	response, err := c.PostRequest("/Init", request)
 	if err != nil {
 		return nil, err
 	}

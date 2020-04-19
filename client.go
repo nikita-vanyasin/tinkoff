@@ -32,7 +32,9 @@ func (c *Client) decodeResponse(response *http.Response, result interface{}) err
 	return json.NewDecoder(response.Body).Decode(result)
 }
 
-func (c *Client) postRequest(url string, request RequestInterface) (*http.Response, error) {
+// PostRequest will automatically sign the request with token
+// Use BaseRequest type to implement any API request
+func (c *Client) PostRequest(url string, request RequestInterface) (*http.Response, error) {
 	c.secureRequest(request)
 	data, err := json.Marshal(request)
 	if err != nil {

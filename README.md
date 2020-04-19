@@ -90,5 +90,4 @@ res, err := a.client.Cancel(req)
 - Improve usage documentation
 
 ### Also planned:
-- Init: implement support for Recurrent and PayType fields
 - Add support for more API methods

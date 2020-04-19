@@ -37,7 +37,7 @@ type CancelResponse struct {
 }
 
 func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
-	response, err := c.postRequest("/Cancel", request)
+	response, err := c.PostRequest("/Cancel", request)
 	if err != nil {
 		return nil, err
 	}
