@@ -9,6 +9,9 @@ import (
 
 const (
 	RedirectDueDateFormat = time.RFC3339
+
+	PayTypeOneStep  = "O"
+	PayTypeTwoSteps = "T"
 )
 
 type InitRequest struct {
@@ -19,6 +22,7 @@ type InitRequest struct {
 	ClientIP        string            `json:"IP,omitempty"`              // IP-адрес покупателя
 	Description     string            `json:"Description,omitempty"`     // Описание заказа
 	Language        string            `json:"Language,omitempty"`        // Язык платежной формы: ru или en
+	Recurrent       string            `json:"Recurrent,omitempty"`       // Y для регистрации автоплатежа. Можно использовать SetIsRecurrent(true)
 	CustomerKey     string            `json:"CustomerKey,omitempty"`     // Идентификатор покупателя в системе продавца. Передается вместе с параметром CardId. См. метод GetCardList
 	Data            map[string]string `json:"DATA"`                      // Дополнительные параметры платежа
 	Receipt         *Receipt          `json:"Receipt,omitempty"`         // Чек
@@ -26,10 +30,18 @@ type InitRequest struct {
 	NotificationURL string            `json:"NotificationURL,omitempty"` // Адрес для получения http нотификаций
 	SuccessURL      string            `json:"SuccessURL,omitempty"`      // Страница успеха
 	FailURL         string            `json:"FailURL,omitempty"`         // Страница ошибки
-
+	PayType         string            `json:"PayType,omitempty"`         // Тип оплаты. см. PayType*
 	// Not implemented yet:
 	// Recurrent
 	// PayType
+}
+
+func (i *InitRequest) SetIsRecurrent(r bool) {
+	if r {
+		i.Recurrent = "Y"
+	} else {
+		i.Recurrent = ""
+	}
 }
 
 func (i *InitRequest) GetValuesForToken() map[string]string {

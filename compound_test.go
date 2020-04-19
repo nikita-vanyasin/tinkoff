@@ -18,6 +18,7 @@ func TestInitThenCancel(t *testing.T) {
 		OrderID:     orderID,
 		CustomerKey: "123",
 		Description: "some really useful product",
+		PayType:     tinkoff.PayTypeTwoSteps,
 		Receipt: &tinkoff.Receipt{
 			Email: "user@example.com",
 			Items: []*tinkoff.ReceiptItem{
