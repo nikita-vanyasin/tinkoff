@@ -8,7 +8,7 @@ import (
 	"github.com/nikita-vanyasin/tinkoff"
 )
 
-func TestInitThenCancel(t *testing.T) {
+func TestCallsChain(t *testing.T) {
 	c := helperCreateClient(t)
 
 	// create new payment
@@ -69,9 +69,16 @@ func TestInitThenCancel(t *testing.T) {
 	assertNotError(t, err)
 
 	assertEq(t, true, cancelRes.Success)
-
 	assertEq(t, tinkoff.StatusCanceled, cancelRes.Status)
 	assertEq(t, initRes.PaymentID, cancelRes.PaymentID)
 	assertEq(t, orderID, cancelRes.OrderID)
+
+	// get state
+	stateRes, err := c.GetState(&tinkoff.GetStateRequest{PaymentID: initRes.PaymentID})
+	assertNotError(t, err)
+
+	assertEq(t, true, stateRes.Success)
+	assertEq(t, initRes.PaymentID, stateRes.PaymentID)
+	assertEq(t, tinkoff.StatusCanceled, cancelRes.Status)
 
 }
