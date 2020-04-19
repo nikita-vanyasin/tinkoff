@@ -83,8 +83,6 @@ res, err := a.client.Cancel(req)
 ```
 
 ### Roadmap to v1.0.0
-- Accept time.Time object instead of formatted string
-- Add more validation (not sure about that one yet)
 - GetStatus
 - Resend
 - Improve usage documentation
