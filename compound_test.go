@@ -18,7 +18,7 @@ func TestCallsChain(t *testing.T) {
 		OrderID:         orderID,
 		CustomerKey:     "123",
 		Description:     "some really useful product",
-		PayType:         tinkoff.PayTypeTwoSteps,
+		PayType:         tinkoff.PayTypeOneStep,
 		RedirectDueDate: tinkoff.Time(time.Now().Add(4 * time.Hour * 24)), // ссылка истечет через 4 дня
 		Receipt: &tinkoff.Receipt{
 			Email: "user@example.com",
