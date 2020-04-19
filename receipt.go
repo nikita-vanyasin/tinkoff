@@ -24,67 +24,22 @@ const (
 	VAT120 = "vat120" // НДС чека по расчетной ставке 20/120
 )
 
-var taxationOptions = []string{
-	TaxationOSN,
-	TaxationUSNIncome,
-	TaxationUSNIncomeOutcome,
-	TaxationENVD,
-	TaxationESN,
-	TaxationPatent,
-}
-
-var vatOptions = []string{
-	VATNone,
-	VAT0,
-	VAT10,
-	VAT18,
-	VAT20,
-	VAT110,
-	VAT118,
-	VAT120,
+type Receipt struct {
+	Email        string         `json:"Email,omitempty"`        // Электронная почта покупателя
+	Phone        string         `json:"Phone,omitempty"`        // Контактный телефон покупателя
+	EmailCompany string         `json:"EmailCompany,omitempty"` // Электронная почта продавца
+	Taxation     string         `json:"Taxation"`               // Система налогооблажения. см. константы Taxation*
+	Items        []*ReceiptItem `json:"Items"`
 }
 
 type ReceiptItem struct {
-	Name     string // Наименование товара. Максимальная длина строки – 64 символа
-	Price    uint64 // Цена в копейках. *Целочисленное значение не более 10 знаков
-	Quantity string // Количество/вес: целая часть не более 8 знаков; дробная часть не более 3 знаков
-	Amount   uint64 // Сумма в копейках. Целочисленное значение не более 10 знаков
-	Tax      string // Ставка налога
-	Ean13    string // Штрих-код
-	ShopCode string // Код магазина
-}
-
-func (i *ReceiptItem) IsValid() bool {
-	if i.Name == "" || i.Price == 0 || i.Quantity == "" || i.Amount == 0 || i.Tax == "" {
-		return false
-	}
-
-	for _, option := range vatOptions {
-		if i.Tax == option {
-			return true
-		}
-	}
-
-	return false
-}
-
-type Receipt struct {
-	Items    []*ReceiptItem
-	Email    string
-	Phone    string
-	Taxation string
-}
-
-func (r *Receipt) IsValid() bool {
-	if r.Email == "" && r.Phone == "" {
-		return false
-	}
-
-	for _, option := range taxationOptions {
-		if r.Taxation == option {
-			return true
-		}
-	}
-
-	return false
+	Name          string `json:"Name"`                    // Наименование товара
+	Quantity      string `json:"Quantity"`                // Количество или вес товара
+	Amount        uint64 `json:"Amount"`                  // Стоимость товара в копейках
+	Price         uint64 `json:"Price"`                   // Цена товара в копейках
+	PaymentMethod string `json:"PaymentMethod,omitempty"` // Признак способа расчета
+	PaymentObject string `json:"PaymentObject,omitempty"` // Признак предмета расчета
+	Tax           string `json:"Tax"`                     // Ставка налога. см. константы VAT*
+	Ean13         string `json:"Ean13,omitempty"`         // Ean13
+	ShopCode      string `json:"ShopCode,omitempty"`      // Код магазина
 }
