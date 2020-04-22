@@ -81,4 +81,9 @@ func TestCallsChain(t *testing.T) {
 	assertEq(t, initRes.PaymentID, stateRes.PaymentID)
 	assertEq(t, tinkoff.StatusCanceled, cancelRes.Status)
 
+	resendRes, err := c.Resend()
+	assertNotError(t, err)
+
+	assertEq(t, 0, resendRes.Count)
+
 }

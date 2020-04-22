@@ -15,6 +15,7 @@ Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
   - [Create payment](#create-payment)
   - [Cancel or refund payment](#cancel-or-refund-payment)
   - [Get payment state](#get-payment-state)
+  - [Resend notifications](#resend-notifications)
   - [Helper functions](#helper-functions)
 - [Roadmap to v1.0.0](#roadmap-to-v100)
 - [References](#references)
@@ -109,6 +110,14 @@ if res.Status == tinkoff.StatusConfirmed {
 }
 ```
 
+#### Resend notifications
+[Resend](https://oplata.tinkoff.ru/develop/api/payments/resend-description/)
+```go
+res, err := c.Resend()
+// ...
+fmt.Println("resend scheduled for %d notifications", res.Count)
+```
+
 #### Helper functions
 - `client.PostRequest` allows you to implement API requests which are not implemented in this package yet (e.g. when Tinkoff Bank adds new method to API).
   Use BaseRequest type to implement any API request:
@@ -129,7 +138,6 @@ if res.Status == tinkoff.StatusConfirmed {
   ``` 
 
 ## Roadmap to v1.0.0
-- Resend
 - FinishAuthorize
 - Confirm
 - Submit3DSAuthorization
