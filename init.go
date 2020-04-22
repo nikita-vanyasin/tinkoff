@@ -54,16 +54,14 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 }
 
 type InitResponse struct {
-	TerminalKey  string `json:"TerminalKey"`          // Идентификатор терминала, выдается Продавцу Банком
-	Amount       uint64 `json:"Amount"`               // Сумма в копейках
-	OrderID      string `json:"OrderId"`              // Номер заказа в системе Продавца
-	Success      bool   `json:"Success"`              // Успешность операции
-	Status       string `json:"Status"`               // Статус транзакции
-	PaymentID    string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка. По офф. документации это number(20), но фактически значение передается в виде строки.
-	PaymentURL   string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
-	ErrorCode    string `json:"ErrorCode"`            // Код ошибки, «0» - если успешно
-	ErrorMessage string `json:"Message,omitempty"`    // Краткое описание ошибки
-	ErrorDetails string `json:"Details,omitempty"`    // Подробное описание ошибки
+	TerminalKey string `json:"TerminalKey"`          // Идентификатор терминала, выдается Продавцу Банком
+	Amount      uint64 `json:"Amount"`               // Сумма в копейках
+	OrderID     string `json:"OrderId"`              // Номер заказа в системе Продавца
+	Success     bool   `json:"Success"`              // Успешность операции
+	Status      string `json:"Status"`               // Статус транзакции
+	PaymentID   string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка. По офф. документации это number(20), но фактически значение передается в виде строки.
+	PaymentURL  string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
+	ErrorInfo
 }
 
 func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
@@ -79,15 +77,15 @@ func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
 		return nil, err
 	}
 
-	if !res.Success || res.ErrorCode != "0" || res.Status == StatusRejected {
-		errMsg := fmt.Sprintf(
-			"while init request: code %s - %s. %s",
-			res.ErrorCode,
-			res.ErrorMessage,
-			res.ErrorDetails,
-		)
+	errMsg := ""
+	if !res.Success || res.ErrorCode != "0" {
+		errMsg = res.FormatErrorInfo()
+	}
+	if res.Status != StatusNew {
+		errMsg = fmt.Sprintf("unexpected payment status: %s. %s", res.Status, errMsg)
+	}
+	if errMsg != "" {
 		err = errors.New(errMsg)
 	}
-
 	return &res, err
 }

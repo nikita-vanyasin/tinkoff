@@ -2,7 +2,6 @@ package tinkoff
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 )
 
@@ -24,16 +23,14 @@ func (i *CancelRequest) GetValuesForToken() map[string]string {
 }
 
 type CancelResponse struct {
-	TerminalKey    string `json:"TerminalKey"`       // Идентификатор терминала, выдается Продавцу Банком
-	OriginalAmount uint64 `json:"OriginalAmount"`    // Сумма в копейках до операции отмены
-	NewAmount      uint64 `json:"NewAmount"`         // Сумма в копейках после операции отмены
-	OrderID        string `json:"OrderId"`           // Номер заказа в системе Продавца
-	Success        bool   `json:"Success"`           // Успешность операции
-	Status         string `json:"Status"`            // Статус транзакции
-	PaymentID      string `json:"PaymentId"`         // Уникальный идентификатор транзакции в системе Банка
-	ErrorCode      string `json:"ErrorCode"`         // Код ошибки, «0» - если успешно
-	ErrorMessage   string `json:"Message,omitempty"` // Краткое описание ошибки
-	ErrorDetails   string `json:"Details,omitempty"` // Подробное описание ошибки
+	TerminalKey    string `json:"TerminalKey"`    // Идентификатор терминала, выдается Продавцу Банком
+	OriginalAmount uint64 `json:"OriginalAmount"` // Сумма в копейках до операции отмены
+	NewAmount      uint64 `json:"NewAmount"`      // Сумма в копейках после операции отмены
+	OrderID        string `json:"OrderId"`        // Номер заказа в системе Продавца
+	Success        bool   `json:"Success"`        // Успешность операции
+	Status         string `json:"Status"`         // Статус транзакции
+	PaymentID      string `json:"PaymentId"`      // Уникальный идентификатор транзакции в системе Банка
+	ErrorInfo
 }
 
 func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
@@ -50,7 +47,7 @@ func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
 	}
 
 	if !res.Success || res.ErrorCode != "0" {
-		err = errors.New(fmt.Sprintf("while Cancel request: code %s - %s. %s", res.ErrorCode, res.ErrorMessage, res.ErrorDetails))
+		err = errors.New(res.FormatErrorInfo())
 	}
 
 	return &res, err
