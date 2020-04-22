@@ -1,7 +1,6 @@
 package tinkoff
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -54,14 +53,12 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 }
 
 type InitResponse struct {
-	TerminalKey string `json:"TerminalKey"`          // Идентификатор терминала, выдается Продавцу Банком
-	Amount      uint64 `json:"Amount"`               // Сумма в копейках
-	OrderID     string `json:"OrderId"`              // Номер заказа в системе Продавца
-	Success     bool   `json:"Success"`              // Успешность операции
-	Status      string `json:"Status"`               // Статус транзакции
-	PaymentID   string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка. По офф. документации это number(20), но фактически значение передается в виде строки.
-	PaymentURL  string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
-	ErrorInfo
+	BaseResponse
+	Amount     uint64 `json:"Amount"`               // Сумма в копейках
+	OrderID    string `json:"OrderId"`              // Номер заказа в системе Продавца
+	Status     string `json:"Status"`               // Статус транзакции
+	PaymentID  string `json:"PaymentId"`            // Уникальный идентификатор транзакции в системе Банка. По офф. документации это number(20), но фактически значение передается в виде строки.
+	PaymentURL string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
 }
 
 func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
@@ -77,15 +74,10 @@ func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
 		return nil, err
 	}
 
-	errMsg := ""
-	if !res.Success || res.ErrorCode != "0" {
-		errMsg = res.FormatErrorInfo()
-	}
+	err = res.Error()
 	if res.Status != StatusNew {
-		errMsg = fmt.Sprintf("unexpected payment status: %s. %s", res.Status, errMsg)
+		err = errorConcat(err, fmt.Errorf("unexpected payment status: %s", res.Status))
 	}
-	if errMsg != "" {
-		err = errors.New(errMsg)
-	}
+
 	return &res, err
 }

@@ -1,9 +1,5 @@
 package tinkoff
 
-import (
-	"errors"
-)
-
 type GetStateRequest struct {
 	BaseRequest
 
@@ -19,12 +15,10 @@ func (i *GetStateRequest) GetValuesForToken() map[string]string {
 }
 
 type GetStateResponse struct {
-	TerminalKey string `json:"TerminalKey"` // Идентификатор терминала, выдается Продавцу Банком
-	OrderID     string `json:"OrderId"`     // Номер заказа в системе Продавца
-	Success     bool   `json:"Success"`     // Успешность операции
-	Status      string `json:"Status"`      // Статус платежа
-	PaymentID   string `json:"PaymentId"`   // Уникальный идентификатор транзакции в системе Банка
-	ErrorInfo
+	BaseResponse
+	OrderID   string `json:"OrderId"`   // Номер заказа в системе Продавца
+	Status    string `json:"Status"`    // Статус платежа
+	PaymentID string `json:"PaymentId"` // Уникальный идентификатор транзакции в системе Банка
 }
 
 func (c *Client) GetState(request *GetStateRequest) (*GetStateResponse, error) {
@@ -40,9 +34,5 @@ func (c *Client) GetState(request *GetStateRequest) (*GetStateResponse, error) {
 		return nil, err
 	}
 
-	if !res.Success || res.ErrorCode != "0" {
-		err = errors.New(res.FormatErrorInfo())
-	}
-
-	return &res, err
+	return &res, res.Error()
 }

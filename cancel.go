@@ -1,7 +1,6 @@
 package tinkoff
 
 import (
-	"errors"
 	"strconv"
 )
 
@@ -23,14 +22,12 @@ func (i *CancelRequest) GetValuesForToken() map[string]string {
 }
 
 type CancelResponse struct {
-	TerminalKey    string `json:"TerminalKey"`    // Идентификатор терминала, выдается Продавцу Банком
+	BaseResponse
 	OriginalAmount uint64 `json:"OriginalAmount"` // Сумма в копейках до операции отмены
 	NewAmount      uint64 `json:"NewAmount"`      // Сумма в копейках после операции отмены
 	OrderID        string `json:"OrderId"`        // Номер заказа в системе Продавца
-	Success        bool   `json:"Success"`        // Успешность операции
 	Status         string `json:"Status"`         // Статус транзакции
 	PaymentID      string `json:"PaymentId"`      // Уникальный идентификатор транзакции в системе Банка
-	ErrorInfo
 }
 
 func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
@@ -46,9 +43,5 @@ func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
 		return nil, err
 	}
 
-	if !res.Success || res.ErrorCode != "0" {
-		err = errors.New(res.FormatErrorInfo())
-	}
-
-	return &res, err
+	return &res, res.Error()
 }
