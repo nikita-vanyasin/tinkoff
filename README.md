@@ -16,6 +16,7 @@ Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
   - [Cancel or refund payment](#cancel-or-refund-payment)
   - [Get payment state](#get-payment-state)
   - [Resend notifications](#resend-notifications)
+  - [Confirm two-step payment](#confirm-two-step-payment)
   - [Helper functions](#helper-functions)
 - [Roadmap to v1.0.0](#roadmap-to-v100)
 - [References](#references)
@@ -104,7 +105,17 @@ res, err := client.Cancel(req)
 [GetState](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 ```go
 res, err := client.GetState(&tinkoff.GetStateRequest{PaymentID: "3293"})
-// ..
+// ...
+if res.Status == tinkoff.StatusConfirmed {
+    fmt.Println("payment completed")
+}
+```
+
+#### Confirm two-step payment
+[Confirm](https://oplata.tinkoff.ru/develop/api/payments/confirm-description/)
+```go
+res, err := client.Confirm(&tinkoff.ConfirmRequest{PaymentID: "3294"})
+// ...
 if res.Status == tinkoff.StatusConfirmed {
     fmt.Println("payment completed")
 }
@@ -139,7 +150,6 @@ fmt.Println("resend scheduled for %d notifications", res.Count)
 
 ## Roadmap to v1.0.0
 - FinishAuthorize
-- Confirm
 - Submit3DSAuthorization
 
 
