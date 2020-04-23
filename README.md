@@ -1,7 +1,6 @@
 
 # Go client for Tinkoff Acquiring API (v2)
 
-### Warning: package has no stable version yet.
 The package allows to send [token-signed](https://oplata.tinkoff.ru/develop/api/request-sign/) requests to Tinkoff Acquiring API and parse incoming HTTP notifications.
 
 Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
@@ -20,6 +19,7 @@ Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
   - [Helper functions](#helper-functions)
 - [Roadmap to v1.0.0](#roadmap-to-v100)
 - [References](#references)
+- [Contribution](#contribution)
 
 
 ## Installation
@@ -146,12 +146,7 @@ fmt.Println("resend scheduled for %d notifications", res.Count)
   if !tinkoff.IsRefundableStatus(payment.Status) {
       return errors.New("payment can't be refunded")
   }
-  ``` 
-
-## Roadmap to v1.0.0
-- FinishAuthorize
-- Submit3DSAuthorization
-
+  ```
 
 ## References
 The code in this repo based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff). Differences:
@@ -162,3 +157,12 @@ The code in this repo based on some code from [koorgoo/tinkoff](https://github.c
 More useful links:
 - Official [Tinkoff Acquiring API SDK for Android (java)](https://github.com/TinkoffCreditSystems/tinkoff-asdk-android)
 - Official [PHP client and integration examples](https://oplata.tinkoff.ru/develop/api/examples/)
+
+## Contribution
+All contributions are welcome! There are plenty of API methods that are not implemented yet due to their rare use-cases:
+- FinishAuthorize
+- Submit3DSAuthorization
+- Charge
+- AddCustomer / GetCustomer / RemoveCustomer
+- GetCardList / RemoveCard 
+ 
