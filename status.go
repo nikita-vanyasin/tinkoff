@@ -23,9 +23,9 @@ const (
 
 func IsRefundableStatus(status string) bool {
 	switch status {
-	case StatusNew:
-	case StatusAuthorized:
-	case StatusConfirmed:
+	case StatusNew,
+		StatusAuthorized,
+		StatusConfirmed:
 		return true
 	}
 	return false
