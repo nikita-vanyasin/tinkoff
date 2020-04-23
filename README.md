@@ -140,13 +140,6 @@ fmt.Println("resend scheduled for %d notifications", res.Count)
   httpResp, err := client.PostRequest(&myCouponUpgradeRequest{PaymentID: "3293", Coupon: "whatever"})
   ```
 
-- `tinkoff.IsRefundableStatus(s)` allows you to check if the payment can be refunded according to policies provided by Tinkoff API doc:
-  ```go
-  if !tinkoff.IsRefundableStatus(payment.Status) {
-      return errors.New("payment can't be refunded")
-  }
-  ```
-
 ## References
 The code in this repo based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff). Differences:
 - Support for API v2

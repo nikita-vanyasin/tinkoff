@@ -20,13 +20,3 @@ const (
 	StatusPartialRefunded = "PARTIAL_REFUNDED" // Возвращен частично
 	StatusRefunded        = "REFUNDED"         // Возвращен полностью
 )
-
-func IsRefundableStatus(status string) bool {
-	switch status {
-	case StatusNew,
-		StatusAuthorized,
-		StatusConfirmed:
-		return true
-	}
-	return false
-}
