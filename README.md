@@ -17,7 +17,6 @@ Acquiring API Docs: https://oplata.tinkoff.ru/develop/api/payments/
   - [Resend notifications](#resend-notifications)
   - [Confirm two-step payment](#confirm-two-step-payment)
   - [Helper functions](#helper-functions)
-- [Roadmap to v1.0.0](#roadmap-to-v100)
 - [References](#references)
 - [Contribution](#contribution)
 
