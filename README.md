@@ -1,5 +1,5 @@
 
-# Go client for Tinkoff Acquiring API (v2)
+# Golang Tinkoff Acquiring API (v2) client
 
 The package allows to send [token-signed](https://oplata.tinkoff.ru/develop/api/request-sign/) requests to Tinkoff Acquiring API and parse incoming HTTP notifications.
 
