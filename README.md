@@ -101,7 +101,7 @@ res, err := client.Cancel(req)
 ```
 
 #### Get payment state
-[GetState](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
+[GetState](https://oplata.tinkoff.ru/develop/api/payments/getstate-description/)
 ```go
 res, err := client.GetState(&tinkoff.GetStateRequest{PaymentID: "3293"})
 // ...
