@@ -24,11 +24,13 @@ func TestCallsChain(t *testing.T) {
 			Email: "user@example.com",
 			Items: []*tinkoff.ReceiptItem{
 				{
-					Price:    60000,
-					Quantity: "1",
-					Amount:   60000,
-					Name:     "Product #1",
-					Tax:      tinkoff.VATNone,
+					Price:         60000,
+					Quantity:      "1",
+					Amount:        60000,
+					Name:          "Product #1",
+					Tax:           tinkoff.VATNone,
+					PaymentMethod: tinkoff.PaymentMethodFullPayment,
+					PaymentObject: tinkoff.PaymentObjectIntellectualActivity,
 				},
 			},
 			Taxation: tinkoff.TaxationUSNIncome,

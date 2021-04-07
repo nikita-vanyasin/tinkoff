@@ -24,6 +24,32 @@ const (
 	VAT120 = "vat120" // НДС чека по расчетной ставке 20/120
 )
 
+const (
+	PaymentMethodFullPayment    = "full_payment"    // полный расчет
+	PaymentMethodFullPrepayment = "full_prepayment" // предоплата 100%
+	PaymentMethodPrepayment     = "prepayment"      // предоплата
+	PaymentMethodAdvance        = "advance"         // аванс
+	PaymentMethodPartialPayment = "partial_payment" // частичный расчет и кредит
+	PaymentMethodCredit         = "credit"          // передача в кредит
+	PaymentMethodCreditPayment  = "credit_payment"  // оплата кредита
+)
+
+const (
+	PaymentObjectCommodity            = "commodity"             // товар
+	PaymentObjectExcise               = "excise"                // подакцизный товар
+	PaymentObjectJob                  = "job"                   // работа
+	PaymentObjectService              = "service"               // услуга
+	PaymentObjectGamblingBet          = "gambling_bet"          // ставка азартной игры
+	PaymentObjectGamblingPrize        = "gambling_prize"        // выигрыш азартной игры
+	PaymentObjectLottery              = "lottery"               // лотерейный билет
+	PaymentObjectLotteryPrize         = "lottery_prize"         // выигрыш лотереи
+	PaymentObjectIntellectualActivity = "intellectual_activity" // предоставление результатов интеллектуальной деятельности
+	PaymentObjectPayment              = "payment"               // платеж
+	PaymentObjectAgentCommission      = "agent_commission"      // агентское вознаграждение
+	PaymentObjectComposite            = "composite"             // составной предмет расчета
+	PaymentObjectAnother              = "another"               // иной предмет расчета
+)
+
 type Receipt struct {
 	Email        string         `json:"Email,omitempty"`        // Электронная почта покупателя
 	Phone        string         `json:"Phone,omitempty"`        // Контактный телефон покупателя
@@ -37,8 +63,8 @@ type ReceiptItem struct {
 	Quantity      string `json:"Quantity"`                // Количество или вес товара
 	Amount        uint64 `json:"Amount"`                  // Стоимость товара в копейках
 	Price         uint64 `json:"Price"`                   // Цена товара в копейках
-	PaymentMethod string `json:"PaymentMethod,omitempty"` // Признак способа расчета
-	PaymentObject string `json:"PaymentObject,omitempty"` // Признак предмета расчета
+	PaymentMethod string `json:"PaymentMethod,omitempty"` // Признак способа расчета. см. PaymentMethod*
+	PaymentObject string `json:"PaymentObject,omitempty"` // Признак предмета расчета. см. PaymentObject*
 	Tax           string `json:"Tax"`                     // Ставка налога. см. константы VAT*
 	Ean13         string `json:"Ean13,omitempty"`         // Ean13
 	ShopCode      string `json:"ShopCode,omitempty"`      // Код магазина
