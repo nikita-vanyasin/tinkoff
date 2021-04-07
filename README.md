@@ -129,16 +129,16 @@ fmt.Println("resend scheduled for %d notifications", res.Count)
 ```
 
 #### Helper functions
-- `client.PostRequest` allows you to implement API requests which are not implemented in this package yet (e.g. when Tinkoff Bank adds new method to API).
-  Use BaseRequest type to implement any API request:
-  ```go
-  type myCouponUpgradeRequest struct {
-      tinkoff.BaseRequest
-      PaymentID string `json:"PaymentId"`
-      Coupon    string `json:"coupon"`
-  }
-  httpResp, err := client.PostRequest(&myCouponUpgradeRequest{PaymentID: "3293", Coupon: "whatever"})
-  ```
+`client.PostRequest` allows you to implement API requests which are not implemented in this package yet (e.g. when Tinkoff Bank adds new method to API).
+Use BaseRequest type to implement any API request:
+```go
+type myCouponUpgradeRequest struct {
+  tinkoff.BaseRequest
+  PaymentID string `json:"PaymentId"`
+  Coupon    string `json:"coupon"`
+}
+httpResp, err := client.PostRequest(&myCouponUpgradeRequest{PaymentID: "3293", Coupon: "whatever"})
+```
 
 ## References
 The code in this repo based on some code from [koorgoo/tinkoff](https://github.com/koorgoo/tinkoff). Differences:

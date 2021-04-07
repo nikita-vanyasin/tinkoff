@@ -1,3 +1,4 @@
+// Package tinkoff allows to send token-signed requests to Tinkoff Acquiring API and parse incoming HTTP notifications
 package tinkoff
 
 import (
@@ -9,12 +10,14 @@ import (
 	"sort"
 )
 
+// Client is the main entity which execute request against the Tinkoff Acquiring API endpoint
 type Client struct {
 	terminalKey string
 	password    string
 	baseURL     string
 }
 
+// NewClient returns new Client instance
 func NewClient(terminalKey, password string) *Client {
 	return &Client{
 		terminalKey: terminalKey,
