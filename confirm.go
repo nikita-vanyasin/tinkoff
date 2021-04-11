@@ -1,7 +1,5 @@
 package tinkoff
 
-import "strconv"
-
 type ConfirmRequest struct {
 	BaseRequest
 	PaymentID string   `json:"PaymentId"`         // Идентификатор платежа в системе банка
@@ -11,11 +9,12 @@ type ConfirmRequest struct {
 }
 
 func (i *ConfirmRequest) GetValuesForToken() map[string]string {
-	return map[string]string{
-		"Amount":    strconv.FormatUint(i.Amount, 10),
-		"IP":        i.ClientIP,
+	v := map[string]string{
 		"PaymentId": i.PaymentID,
+		"IP":        i.ClientIP,
 	}
+	serializeUintToMapIfNonEmpty(&v, "Amount", i.Amount)
+	return v
 }
 
 type ConfirmResponse struct {

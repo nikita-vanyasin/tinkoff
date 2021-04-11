@@ -2,7 +2,6 @@ package tinkoff
 
 import (
 	"fmt"
-	"strconv"
 )
 
 const (
@@ -38,8 +37,7 @@ func (i *InitRequest) SetIsRecurrent(r bool) {
 }
 
 func (i *InitRequest) GetValuesForToken() map[string]string {
-	return map[string]string{
-		"Amount":          strconv.FormatUint(i.Amount, 10),
+	v := map[string]string{
 		"OrderId":         i.OrderID,
 		"IP":              i.ClientIP,
 		"Description":     i.Description,
@@ -50,6 +48,8 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 		"SuccessURL":      i.SuccessURL,
 		"FailURL":         i.FailURL,
 	}
+	serializeUintToMapIfNonEmpty(&v, "Amount", i.Amount)
+	return v
 }
 
 type InitResponse struct {

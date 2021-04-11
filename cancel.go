@@ -1,9 +1,5 @@
 package tinkoff
 
-import (
-	"strconv"
-)
-
 type CancelRequest struct {
 	BaseRequest
 
@@ -14,11 +10,12 @@ type CancelRequest struct {
 }
 
 func (i *CancelRequest) GetValuesForToken() map[string]string {
-	return map[string]string{
-		"Amount":    strconv.FormatUint(i.Amount, 10),
-		"IP":        i.ClientIP,
+	v := map[string]string{
 		"PaymentId": i.PaymentID,
+		"IP":        i.ClientIP,
 	}
+	serializeUintToMapIfNonEmpty(&v, "Amount", i.Amount)
+	return v
 }
 
 type CancelResponse struct {

@@ -2,6 +2,7 @@ package tinkoff
 
 import (
 	"fmt"
+	"strconv"
 	"time"
 )
 
@@ -17,6 +18,12 @@ func (t Time) String() string {
 		return ""
 	}
 	return original.Format(time.RFC3339)
+}
+
+func serializeUintToMapIfNonEmpty(m *map[string]string, key string, val uint64) {
+	if val != 0 {
+		(*m)[key] = strconv.FormatUint(val, 10)
+	}
 }
 
 func serializeBool(b bool) string {
