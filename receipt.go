@@ -72,9 +72,9 @@ type ReceiptItem struct {
 }
 
 type ReceiptPayments struct {
-	Cash           uint64 `json:"Cash"`
-	Electronic     uint64 `json:"Electronic"`
-	AdvancePayment uint64 `json:"AdvancePayment"`
-	Credit         uint64 `json:"Credit"`
-	Provision      uint64 `json:"Provision"`
+	Cash           uint64 `json:"Cash,omitempty"`           // Вид оплаты "Наличные". Сумма к оплате в копейках не более 14 знаков
+	Electronic     uint64 `json:"Electronic"`               // Вид оплаты "Безналичный".
+	AdvancePayment uint64 `json:"AdvancePayment,omitempty"` // Вид оплаты "Предварительная оплата (Аванс)".
+	Credit         uint64 `json:"Credit,omitempty"`         // Вид оплаты "Постоплата (Кредит)"
+	Provision      uint64 `json:"Provision,omitempty"`      // Вид оплаты "Иная форма оплаты".
 }
