@@ -34,6 +34,9 @@ func TestCallsChain(t *testing.T) {
 				},
 			},
 			Taxation: tinkoff.TaxationUSNIncome,
+			Payments: &tinkoff.ReceiptPayments{
+				Electronic: 60000,
+			},
 		},
 		Data: map[string]string{
 			"custom data field 1": "aasd6da78dasd9",
@@ -65,6 +68,9 @@ func TestCallsChain(t *testing.T) {
 				},
 			},
 			Taxation: tinkoff.TaxationUSNIncome,
+			Payments: &tinkoff.ReceiptPayments{
+				Electronic: 60000,
+			},
 		},
 	}
 	cancelRes, err := c.Cancel(req)
