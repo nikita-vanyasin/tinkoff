@@ -51,11 +51,12 @@ const (
 )
 
 type Receipt struct {
-	Email        string         `json:"Email,omitempty"`        // Электронная почта покупателя
-	Phone        string         `json:"Phone,omitempty"`        // Контактный телефон покупателя
-	EmailCompany string         `json:"EmailCompany,omitempty"` // Электронная почта продавца
-	Taxation     string         `json:"Taxation"`               // Система налогооблажения. см. константы Taxation*
-	Items        []*ReceiptItem `json:"Items"`
+	Email        string           `json:"Email,omitempty"`        // Электронная почта покупателя
+	Phone        string           `json:"Phone,omitempty"`        // Контактный телефон покупателя
+	EmailCompany string           `json:"EmailCompany,omitempty"` // Электронная почта продавца
+	Taxation     string           `json:"Taxation"`               // Система налогооблажения. см. константы Taxation*
+	Items        []*ReceiptItem   `json:"Items"`                  // Массив позиций чека с информацией о товарах.
+	Payments     *ReceiptPayments `json:"Payments,omitempty"`     // Объект с информацией о видах оплаты заказа.
 }
 
 type ReceiptItem struct {
@@ -68,4 +69,12 @@ type ReceiptItem struct {
 	Tax           string `json:"Tax"`                     // Ставка налога. см. константы VAT*
 	Ean13         string `json:"Ean13,omitempty"`         // Ean13
 	ShopCode      string `json:"ShopCode,omitempty"`      // Код магазина
+}
+
+type ReceiptPayments struct {
+	Cash           uint64 `json:"Cash"`
+	Electronic     uint64 `json:"Electronic"`
+	AdvancePayment uint64 `json:"AdvancePayment"`
+	Credit         uint64 `json:"Credit"`
+	Provision      uint64 `json:"Provision"`
 }
