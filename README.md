@@ -94,7 +94,6 @@ fmt.Println("payment form url: %s", res.PaymentPageURL)
 ```
 
 #### Create QR
-// required data to initialize the payment session
 ```go
 req := &tinkoff.InitRequest{
     Amount:      1000,                 // минимум 1000 копеек 
