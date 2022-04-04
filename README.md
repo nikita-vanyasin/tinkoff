@@ -105,7 +105,7 @@ res, err := client.Init(req)
 gqr := &tinkoff.GetQrRequest{
     PaymentID: res.PayID,
 }
-resQr, errQ := client.GetQR(gqr)
+resQR, errQ := client.GetQR(gqr)
 ```
 
 #### Cancel or refund payment
