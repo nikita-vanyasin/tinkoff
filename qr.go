@@ -14,7 +14,7 @@ func (i *GetQrRequest) GetValuesForToken() map[string]string {
 	}
 }
 
-type GetQrResponse struct {
+type GetQRResponse struct {
 	BaseResponse
 	OrderID   string `json:"OrderId"`   // Номер заказа в системе Продавца
 	Data      string `json:"Data"`      // Payload - или SVG
