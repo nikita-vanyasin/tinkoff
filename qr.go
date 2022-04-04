@@ -55,7 +55,7 @@ func (c *Client) GetQR(request *GetQrRequest) (*GetQrResponse, error) {
 // SPBPayTest тестовый метод описанный в API.
 // на рабочем терминале - функция не работает.
 // тестовый терминал не работает у банка.
-func (c *Client) QrTestPay(request *GetQrTestRequest) (*GetQrResponse, error) {
+func (c *Client) SPBPayTest(request *GetQrTestRequest) (*GetQrResponse, error) {
 	response, err := c.PostRequest("/SpbPayTest", request)
 	if err != nil {
 		return nil, err
