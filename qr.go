@@ -52,7 +52,7 @@ func (c *Client) GetQR(request *GetQrRequest) (*GetQrResponse, error) {
 	return &res, res.Error()
 }
 
-// тестовый метод описанный в API.
+// SPBPayTest тестовый метод описанный в API.
 // на рабочем терминале - функция не работает.
 // тестовый терминал не работает у банка.
 func (c *Client) QrTestPay(request *GetQrTestRequest) (*GetQrResponse, error) {
