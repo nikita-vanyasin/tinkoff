@@ -21,7 +21,7 @@ type GetQRResponse struct {
 	PaymentID int    `json:"PaymentId"` // Идентификатор платежа в системе банка.
 }
 
-type GetQrTestRequest struct {
+type GetQRTestRequest struct {
 	BaseRequest
 
 	PaymentID         string `json:"PaymentId"`         // Идентификатор платежа в системе банка. По офф. документации это number(20), но фактически значение передается в виде строки
