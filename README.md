@@ -94,7 +94,6 @@ fmt.Println("payment form url: %s", res.PaymentPageURL)
 ```
 
 #### Create QR
-// обязательные данные для инициализации платежной сессии
 // required data to initialize the payment session
 ```go
 req := &tinkoff.InitRequest{
