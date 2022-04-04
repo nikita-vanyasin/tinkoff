@@ -93,6 +93,19 @@ res, err := client.Init(req)
 fmt.Println("payment form url: %s", res.PaymentPageURL)
 ```
 
+#### Create QR
+```go
+req := &tinkoff.InitRequest{
+    Amount:      1000,                 // минимум 1000 копеек 
+    OrderID:     "123456",
+    Data: map[string]string{"": "",},  // nil - недопустим.
+res, err := client.Init(req)
+gqr := &tinkoff.GetQrRequest{
+    PaymentID: res.PayID,
+}
+resQR, errQ := client.GetQR(gqr)
+```
+
 #### Cancel or refund payment
 [Cancel](https://oplata.tinkoff.ru/develop/api/payments/cancel-description/)
 ```go
