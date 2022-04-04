@@ -7,7 +7,7 @@ type GetQRRequest struct {
 	DataType  string `json:"DataType"`  //Тип возвращаемых данных. PAYLOAD – В ответе возвращается только Payload (по-умолчанию). IMAGE – В ответе возвращается SVG изображение QR
 }
 
-func (i *GetQrRequest) GetValuesForToken() map[string]string {
+func (i *GetQRRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"PaymentId":   i.PaymentID,
 		"TerminalKey": i.TerminalKey,
@@ -29,21 +29,21 @@ type GetQRTestRequest struct {
 	IsRejected        bool   `json:"IsRejected"`        // Признак эмуляции отказа Банка в проведении платежа. true – требуется эмуляция (не может быть использован вместе с IsDeadlineExpired = true)
 }
 
-func (i *GetQrTestRequest) GetValuesForToken() map[string]string {
+func (i *GetQRTestRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"PaymentId":   i.PaymentID,
 		"TerminalKey": i.TerminalKey,
 	}
 }
 
-func (c *Client) GetQR(request *GetQrRequest) (*GetQrResponse, error) {
+func (c *Client) GetQR(request *GetQRRequest) (*GetQRResponse, error) {
 	response, err := c.PostRequest("/GetQr", request)
 	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	var res GetQrResponse
+	var res GetQRResponse
 	err = c.decodeResponse(response, &res)
 	if err != nil {
 		return nil, err
@@ -55,14 +55,14 @@ func (c *Client) GetQR(request *GetQrRequest) (*GetQrResponse, error) {
 // SPBPayTest тестовый метод описанный в API.
 // на рабочем терминале - функция не работает.
 // тестовый терминал не работает у банка.
-func (c *Client) SPBPayTest(request *GetQrTestRequest) (*GetQrResponse, error) {
+func (c *Client) SPBPayTest(request *GetQRTestRequest) (*GetQRResponse, error) {
 	response, err := c.PostRequest("/SpbPayTest", request)
 	if err != nil {
 		return nil, err
 	}
 	defer response.Body.Close()
 
-	var res GetQrResponse
+	var res GetQRResponse
 	err = c.decodeResponse(response, &res)
 	if err != nil {
 		return nil, err
