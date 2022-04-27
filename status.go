@@ -17,6 +17,7 @@ const (
 	StatusConfirming      = "CONFIRMING"       // Подтверждается
 	StatusConfirmed       = "CONFIRMED"        // Подтвержден
 	StatusRefunding       = "REFUNDING"        // Возвращается
+	StatusQRRefunding     = "ASYNC_REFUNDING"  // Возврат QR
 	StatusPartialRefunded = "PARTIAL_REFUNDED" // Возвращен частично
 	StatusRefunded        = "REFUNDED"         // Возвращен полностью
 )
