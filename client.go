@@ -8,21 +8,24 @@ import (
 	"fmt"
 	"net/http"
 	"sort"
+	"time"
 )
 
 // Client is the main entity which execute request against the Tinkoff Acquiring API endpoint
 type Client struct {
-	terminalKey string
-	password    string
-	baseURL     string
+	terminalKey    string
+	password       string
+	baseURL        string
+	postTimeoutSec int
 }
 
 // NewClient returns new Client instance
 func NewClient(terminalKey, password string) *Client {
 	return &Client{
-		terminalKey: terminalKey,
-		password:    password,
-		baseURL:     "https://securepay.tinkoff.ru/v2",
+		terminalKey:    terminalKey,
+		password:       password,
+		baseURL:        "https://securepay.tinkoff.ru/v2",
+		postTimeoutSec: 2,
 	}
 }
 
@@ -30,6 +33,7 @@ func NewClient(terminalKey, password string) *Client {
 func (c *Client) SetBaseURL(baseURL string) {
 	c.baseURL = baseURL
 }
+func (c *Client) SetPostTimeout(seconds int) { c.postTimeoutSec = seconds }
 
 func (c *Client) decodeResponse(response *http.Response, result interface{}) error {
 	return json.NewDecoder(response.Body).Decode(result)
@@ -43,7 +47,8 @@ func (c *Client) PostRequest(url string, request RequestInterface) (*http.Respon
 	if err != nil {
 		return nil, err
 	}
-	resp, err := http.Post(c.baseURL+url, "application/json", bytes.NewReader(data))
+	transport := &http.Client{Timeout: time.Duration(c.postTimeoutSec) * time.Second}
+	resp, err := transport.Post(c.baseURL+url, "application/json", bytes.NewReader(data))
 	return resp, err
 }
 
