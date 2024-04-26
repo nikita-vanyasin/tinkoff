@@ -22,9 +22,8 @@ Acquiring API Docs: https://www.tinkoff.ru/kassa/dev/payments/
 
 
 ## Installation
-Use **go mod** as usual or install the package with **dep**:
 ```bash
-dep ensure -add github.com/nikita-vanyasin/tinkoff
+go get github.com/nikita-vanyasin/tinkoff@latest
 ```
 
 ## Usage
