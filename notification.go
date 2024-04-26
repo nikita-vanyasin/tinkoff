@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"strconv"
 )
 
@@ -54,8 +53,9 @@ func (n *Notification) GetValuesForToken() map[string]string {
 	return result
 }
 
+// ParseNotification tries to parse payment state change notification body
 func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error) {
-	bytes, err := ioutil.ReadAll(requestBody)
+	bytes, err := io.ReadAll(requestBody)
 	if err != nil {
 		return nil, err
 	}

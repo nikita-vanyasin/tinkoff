@@ -1,6 +1,8 @@
 package tinkoff_test
 
 import (
+	"context"
+	"errors"
 	"strconv"
 	"testing"
 	"time"
@@ -92,6 +94,10 @@ func TestCallsChain(t *testing.T) {
 	resendRes, err := c.Resend()
 	assertNotError(t, err)
 
-	assertEq(t, 0, resendRes.Count)
+	verySmallTimeoutCtx, cancel := context.WithTimeout(context.Background(), 100*time.Nanosecond)
+	defer cancel()
+	_, err = c.ResendWithContext(verySmallTimeoutCtx)
+	assertEq(t, context.DeadlineExceeded, errors.Unwrap(err))
 
+	assertEq(t, 0, resendRes.Count)
 }

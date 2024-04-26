@@ -1,5 +1,7 @@
 package tinkoff
 
+import "context"
+
 type GetStateRequest struct {
 	BaseRequest
 
@@ -21,8 +23,15 @@ type GetStateResponse struct {
 	PaymentID string `json:"PaymentId"` // Уникальный идентификатор транзакции в системе Банка
 }
 
+// GetState returns info about payment
+// Deprecated: use GetStateWithContext instead
 func (c *Client) GetState(request *GetStateRequest) (*GetStateResponse, error) {
-	response, err := c.PostRequest("/GetState", request)
+	return c.GetStateWithContext(context.Background(), request)
+}
+
+// GetStateWithContext returns info about payment
+func (c *Client) GetStateWithContext(ctx context.Context, request *GetStateRequest) (*GetStateResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/GetState", request)
 	if err != nil {
 		return nil, err
 	}

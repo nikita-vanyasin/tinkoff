@@ -1,5 +1,7 @@
 package tinkoff
 
+import "context"
+
 type ConfirmRequest struct {
 	BaseRequest
 	PaymentID string   `json:"PaymentId"`         // Идентификатор платежа в системе банка
@@ -24,8 +26,15 @@ type ConfirmResponse struct {
 	PaymentID string `json:"PaymentId"` // Идентификатор платежа в системе банка.
 }
 
+// Confirm finalizes the payment
+// Deprecated: use ConfirmWithContext instead
 func (c *Client) Confirm(request *ConfirmRequest) (*ConfirmResponse, error) {
-	response, err := c.PostRequest("/Confirm", request)
+	return c.ConfirmWithContext(context.Background(), request)
+}
+
+// ConfirmWithContext finalizes the payment
+func (c *Client) ConfirmWithContext(ctx context.Context, request *ConfirmRequest) (*ConfirmResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/Confirm", request)
 	if err != nil {
 		return nil, err
 	}

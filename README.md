@@ -37,7 +37,14 @@ Some examples of usage can be found in `*_test.go` files.
 #### Create client
 Provide terminal key and password from terminal settings page.
 ```go
-client := tinkoff.NewClient(terminalKey, terminalPassword)
+client := tinkoff.NewClientWithOptions(
+  WithTerminalKey(terminalKey),
+  WithPassword(password),
+  // Optional override HTTP client:
+  // WithHTTPClient(myClient),
+  // Optional override base Tinkoff Acquiring API URL:
+  // WithBaseURL(myURL),
+)
 ```
 
 #### Handle HTTP notification
@@ -86,7 +93,13 @@ req := &tinkoff.InitRequest{
         "custom data field 2": "0",
     },
 }
-res, err := client.Init(req)
+
+// Set timeout for Init request:
+ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+defer cancel()
+
+// Execute:
+res, err := client.InitWithContext(ctx, req)
 // ...
 fmt.Println("payment form url: %s", res.PaymentPageURL)
 ```
@@ -98,10 +111,11 @@ req := &tinkoff.InitRequest{
     OrderID:     "123456",
     Data: map[string]string{"": "",},  // nil - недопустим.
 res, err := client.Init(req)
+// ...
 gqr := &tinkoff.GetQrRequest{
     PaymentID: res.PayID,
 }
-resQR, errQ := client.GetQR(gqr)
+resQR, errQ := client.GetQRWithContext(ctx, gqr)
 ```
 
 #### Cancel or refund payment
@@ -110,12 +124,12 @@ req := &tinkoff.CancelRequest{
     PaymentID: "66623",
     Amount: 60000,
 }
-res, err := client.Cancel(req)
+res, err := client.CancelWithContext(ctx, req)
 ```
 
 #### Get payment state
 ```go
-res, err := client.GetState(&tinkoff.GetStateRequest{PaymentID: "3293"})
+res, err := client.GetStateWithContext(ctx, &tinkoff.GetStateRequest{PaymentID: "3293"})
 // ...
 if res.Status == tinkoff.StatusConfirmed {
     fmt.Println("payment completed")
@@ -124,7 +138,7 @@ if res.Status == tinkoff.StatusConfirmed {
 
 #### Confirm two-step payment
 ```go
-res, err := client.Confirm(&tinkoff.ConfirmRequest{PaymentID: "3294"})
+res, err := client.ConfirmWithContext(ctx, &tinkoff.ConfirmRequest{PaymentID: "3294"})
 // ...
 if res.Status == tinkoff.StatusConfirmed {
     fmt.Println("payment completed")
@@ -133,9 +147,9 @@ if res.Status == tinkoff.StatusConfirmed {
 
 #### Resend notifications
 ```go
-res, err := c.Resend()
+res, err := c.ResendWithContext(ctx)
 // ...
-fmt.Println("resend scheduled for %d notifications", res.Count)
+fmt.Println("resend has been scheduled for %d notifications", res.Count)
 ```
 
 #### Helper functions
@@ -147,7 +161,7 @@ type myCouponUpgradeRequest struct {
   PaymentID string `json:"PaymentId"`
   Coupon    string `json:"coupon"`
 }
-httpResp, err := client.PostRequest(&myCouponUpgradeRequest{PaymentID: "3293", Coupon: "whatever"})
+httpResp, err := client.PostRequestWithContext(ctx, &myCouponUpgradeRequest{PaymentID: "3293", Coupon: "whatever"})
 ```
 
 ## References
@@ -155,7 +169,6 @@ The code in this repo based on some code from [koorgoo/tinkoff](https://github.c
 - Support for API v2
 - 'reflect' package is not used. Zero dependencies.
 - No additional error wrapping
-
 
 ## Contribution
 All contributions are welcome! There are plenty of API methods that are not implemented yet due to their rare use-cases:

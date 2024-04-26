@@ -1,5 +1,7 @@
 package tinkoff
 
+import "context"
+
 type ResendRequest struct {
 	BaseRequest
 }
@@ -13,8 +15,15 @@ type ResendResponse struct {
 	Count int `json:"Count"` // Количество сообщений, отправляемых повторно
 }
 
+// Resend requests to send unacknowledged notifications again
+// Deprecated: use ResendWithContext instead
 func (c *Client) Resend() (*ResendResponse, error) {
-	response, err := c.PostRequest("/Resend", &ResendRequest{})
+	return c.ResendWithContext(context.Background())
+}
+
+// ResResendWithContextend requests to send unacknowledged notifications again
+func (c *Client) ResendWithContext(ctx context.Context) (*ResendResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/Resend", &ResendRequest{})
 	if err != nil {
 		return nil, err
 	}
