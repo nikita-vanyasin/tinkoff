@@ -1,5 +1,7 @@
 package tinkoff
 
+import "context"
+
 type GetQRRequest struct {
 	BaseRequest
 
@@ -37,7 +39,11 @@ func (i *GetQRTestRequest) GetValuesForToken() map[string]string {
 }
 
 func (c *Client) GetQR(request *GetQRRequest) (*GetQRResponse, error) {
-	response, err := c.PostRequest("/GetQr", request)
+	return c.GetQRWithContext(context.Background(), request)
+}
+
+func (c *Client) GetQRWithContext(ctx context.Context, request *GetQRRequest) (*GetQRResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/GetQr", request)
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +58,17 @@ func (c *Client) GetQR(request *GetQRRequest) (*GetQRResponse, error) {
 	return &res, res.Error()
 }
 
-// SPBPayTest тестовый метод описанный в API.
-// на рабочем терминале - функция не работает.
-// тестовый терминал не работает у банка.
+// SPBPayTest test method for SPB
+// It is expected to fail on "production" terminal.
+// Deprecated: use SPBPayTestWithContext instead
 func (c *Client) SPBPayTest(request *GetQRTestRequest) (*GetQRResponse, error) {
-	response, err := c.PostRequest("/SpbPayTest", request)
+	return c.SPBPayTestWithContext(context.Background(), request)
+}
+
+// SPBPayTestWithContext test method for SPB
+// It is expected to fail on "production" terminal.
+func (c *Client) SPBPayTestWithContext(ctx context.Context, request *GetQRTestRequest) (*GetQRResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/SpbPayTest", request)
 	if err != nil {
 		return nil, err
 	}

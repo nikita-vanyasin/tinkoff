@@ -1,6 +1,7 @@
 package tinkoff
 
 import (
+	"context"
 	"fmt"
 )
 
@@ -61,8 +62,15 @@ type InitResponse struct {
 	PaymentURL string `json:"PaymentURL,omitempty"` // Ссылка на страницу оплаты. По умолчанию ссылка доступна в течении 24 часов.
 }
 
+// Init prepares new payment transaction
+// Deprecated: use InitWithContext instead
 func (c *Client) Init(request *InitRequest) (*InitResponse, error) {
-	response, err := c.PostRequest("/Init", request)
+	return c.InitWithContext(context.Background(), request)
+}
+
+// InitWithContext prepares new payment transaction
+func (c *Client) InitWithContext(ctx context.Context, request *InitRequest) (*InitResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/Init", request)
 	if err != nil {
 		return nil, err
 	}

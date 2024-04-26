@@ -1,5 +1,9 @@
 package tinkoff
 
+import (
+	"context"
+)
+
 type CancelRequest struct {
 	BaseRequest
 
@@ -27,8 +31,15 @@ type CancelResponse struct {
 	PaymentID      string `json:"PaymentId"`      // Уникальный идентификатор транзакции в системе Банка
 }
 
+// Cancel cancels the payment
+// Deprecated: use CancelWithContext instead
 func (c *Client) Cancel(request *CancelRequest) (*CancelResponse, error) {
-	response, err := c.PostRequest("/Cancel", request)
+	return c.CancelWithContext(context.Background(), request)
+}
+
+// CancelWithContext cancels the payment
+func (c *Client) CancelWithContext(ctx context.Context, request *CancelRequest) (*CancelResponse, error) {
+	response, err := c.PostRequestWithContext(ctx, "/Cancel", request)
 	if err != nil {
 		return nil, err
 	}
