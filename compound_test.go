@@ -15,36 +15,7 @@ func TestCallsChain(t *testing.T) {
 
 	// create new payment
 	orderID := strconv.FormatInt(time.Now().UnixNano(), 10)
-	initReq := &tinkoff.InitRequest{
-		Amount:          60000,
-		OrderID:         orderID,
-		CustomerKey:     "123",
-		Description:     "some really useful product",
-		PayType:         tinkoff.PayTypeOneStep,
-		RedirectDueDate: tinkoff.Time(time.Now().Add(4 * time.Hour * 24)), // ссылка истечет через 4 дня
-		Receipt: &tinkoff.Receipt{
-			Email: "user@example.com",
-			Items: []*tinkoff.ReceiptItem{
-				{
-					Price:         60000,
-					Quantity:      "1",
-					Amount:        60000,
-					Name:          "Product #1",
-					Tax:           tinkoff.VATNone,
-					PaymentMethod: tinkoff.PaymentMethodFullPayment,
-					PaymentObject: tinkoff.PaymentObjectIntellectualActivity,
-				},
-			},
-			Taxation: tinkoff.TaxationUSNIncome,
-			Payments: &tinkoff.ReceiptPayments{
-				Electronic: 60000,
-			},
-		},
-		Data: map[string]string{
-			"custom data field 1": "aasd6da78dasd9",
-			"custom data field 2": "0",
-		},
-	}
+	initReq := prepareInitRequests(orderID)
 	initRes, err := c.Init(initReq)
 	assertNotError(t, err)
 
@@ -118,4 +89,55 @@ func TestCallsChain(t *testing.T) {
 	assertEq(t, context.DeadlineExceeded, errors.Unwrap(err))
 
 	assertEq(t, 0, resendRes.Count)
+}
+
+func prepareInitRequests(orderID string) *tinkoff.InitRequest {
+	return &tinkoff.InitRequest{
+		Amount:          60000,
+		OrderID:         orderID,
+		CustomerKey:     "123",
+		Description:     "some really useful product",
+		PayType:         tinkoff.PayTypeOneStep,
+		RedirectDueDate: tinkoff.Time(time.Now().Add(4 * time.Hour * 24)), // ссылка истечет через 4 дня
+		Receipt: &tinkoff.Receipt{
+			Email: "user@example.com",
+			Items: []*tinkoff.ReceiptItem{
+				{
+					Price:         60000,
+					Quantity:      "1",
+					Amount:        60000,
+					Name:          "Product #1",
+					Tax:           tinkoff.VATNone,
+					PaymentMethod: tinkoff.PaymentMethodFullPayment,
+					PaymentObject: tinkoff.PaymentObjectIntellectualActivity,
+				},
+			},
+			Taxation: tinkoff.TaxationUSNIncome,
+			Payments: &tinkoff.ReceiptPayments{
+				Electronic: 60000,
+			},
+		},
+		Data: map[string]string{
+			"custom data field 1": "aasd6da78dasd9",
+			"custom data field 2": "0",
+		},
+	}
+}
+
+func TestSBPPayTest(t *testing.T) {
+	c := helperCreateClient(t)
+
+	orderID := strconv.FormatInt(time.Now().UnixNano(), 10)
+	initReq := prepareInitRequests(orderID)
+	initRes, err := c.Init(initReq)
+	assertNotError(t, err)
+
+	// Init SBP transaction
+	sbp, err := c.SBPPayTestWithContext(context.Background(), &tinkoff.SBPPayTestRequest{
+		PaymentID:         initRes.PaymentID,
+		IsDeadlineExpired: true,
+		IsRejected:        false,
+	})
+	assertNotError(t, err)
+	assertEq(t, true, sbp.Success)
 }
