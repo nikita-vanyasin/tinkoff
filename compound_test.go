@@ -54,6 +54,24 @@ func TestCallsChain(t *testing.T) {
 	assertNotEmptyString(t, initRes.OrderID)
 	assertNotEmptyString(t, initRes.PaymentURL)
 
+	// get QR for payment (payload)
+	gqr := &tinkoff.GetQRRequest{
+		PaymentID: initRes.PaymentID,
+		DataType:  tinkoff.QRTypePayload,
+	}
+	resQR, err := c.GetQR(gqr)
+	assertNotError(t, err)
+	assertNotEmptyString(t, resQR.Data)
+
+	// get QR for payment (SVG)
+	gqr = &tinkoff.GetQRRequest{
+		PaymentID: initRes.PaymentID,
+		DataType:  tinkoff.QRTypeImage,
+	}
+	resQR, err = c.GetQR(gqr)
+	assertNotError(t, err)
+	assertNotEmptyString(t, resQR.Data)
+
 	// cancel it
 	req := &tinkoff.CancelRequest{
 		PaymentID: initRes.PaymentID,

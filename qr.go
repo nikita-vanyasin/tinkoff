@@ -2,17 +2,23 @@ package tinkoff
 
 import "context"
 
+const (
+	QRTypePayload = "PAYLOAD"
+	QRTypeImage   = "IMAGE"
+)
+
 type GetQRRequest struct {
 	BaseRequest
 
 	PaymentID string `json:"PaymentId"` // Идентификатор платежа в системе банка. По офф. документации это number(20), но фактически значение передается в виде строки
-	DataType  string `json:"DataType"`  //Тип возвращаемых данных. PAYLOAD – В ответе возвращается только Payload (по-умолчанию). IMAGE – В ответе возвращается SVG изображение QR
+	DataType  string `json:"DataType"`  // Тип возвращаемых данных. PAYLOAD (QRTypePayload) – В ответе возвращается только Payload (по-умолчанию). IMAGE (QRTypeImage) – В ответе возвращается SVG изображение QR
 }
 
 func (i *GetQRRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
 		"PaymentId":   i.PaymentID,
 		"TerminalKey": i.TerminalKey,
+		"DataType":    i.DataType,
 	}
 }
 
@@ -38,6 +44,7 @@ func (i *GetQRTestRequest) GetValuesForToken() map[string]string {
 	}
 }
 
+// Deprecated: use GetQRWithContext instead
 func (c *Client) GetQR(request *GetQRRequest) (*GetQRResponse, error) {
 	return c.GetQRWithContext(context.Background(), request)
 }
