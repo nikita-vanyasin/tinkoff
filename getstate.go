@@ -5,14 +5,16 @@ import "context"
 type GetStateRequest struct {
 	BaseRequest
 
-	PaymentID string `json:"PaymentId"`    // Идентификатор платежа в системе банка. По офф. документации это number(20), но фактически значение передается в виде строки
-	ClientIP  string `json:"IP,omitempty"` // IP-адрес покупателя
+	PaymentID   string `json:"PaymentId"`    // Идентификатор платежа в системе банка. По офф. документации это number(20), но фактически значение передается в виде строки
+	TerminalKey string `json:"TerminalKey"`  // Ключ терминала
+	ClientIP    string `json:"IP,omitempty"` // IP-адрес покупателя
 }
 
 func (i *GetStateRequest) GetValuesForToken() map[string]string {
 	return map[string]string{
-		"IP":        i.ClientIP,
-		"PaymentId": i.PaymentID,
+		"IP":          i.ClientIP,
+		"PaymentId":   i.PaymentID,
+		"TerminalKey": i.TerminalKey,
 	}
 }
 
