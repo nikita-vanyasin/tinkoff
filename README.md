@@ -23,12 +23,12 @@ Acquiring API Docs: https://www.tinkoff.ru/kassa/dev/payments/
 
 ## Installation
 ```bash
-go get github.com/nikita-vanyasin/tinkoff@latest
+go get github.com/rentifly/tinkoff@latest
 ```
 
 ## Usage
 
-Automatically generated documentation can be found [here](https://pkg.go.dev/github.com/nikita-vanyasin/tinkoff).
+Automatically generated documentation can be found [here](https://pkg.go.dev/github.com/rentifly/tinkoff).
 
 Some examples of usage can be found in `*_test.go` files.
 
