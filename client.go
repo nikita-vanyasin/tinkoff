@@ -6,13 +6,20 @@ import (
 	"context"
 	"crypto/sha256"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"sort"
+	"strconv"
 )
 
+type httpDoer interface {
+	Do(req *http.Request) (*http.Response, error)
+}
+
 type Config struct {
-	httpClient *http.Client
+	httpClient httpDoer
 
 	terminalKey string
 	password    string
@@ -37,7 +44,7 @@ func WithBaseURL(baseURL string) func(*Config) {
 	}
 }
 
-func WithHTTPClient(c *http.Client) func(*Config) {
+func WithHTTPClient(c httpDoer) func(*Config) {
 	return func(config *Config) {
 		config.httpClient = c
 	}
@@ -100,7 +107,28 @@ func (c *Client) PostRequestWithContext(ctx context.Context, url string, request
 		return nil, err
 	}
 	req.Header.Set("Content-Type", "application/json")
-	return c.httpClient.Do(req)
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+
+	if !c.isSuccessResponseCode(resp) {
+		body, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		return nil, c.returnErrOnResponse(resp.StatusCode, body)
+	}
+
+	return resp, nil
+}
+
+func (c *Client) returnErrOnResponse(code int, body []byte) error {
+	return errors.New("error code: " + strconv.Itoa(code) + "message: " + string(body[:]))
+}
+
+func (c *Client) isSuccessResponseCode(resp *http.Response) bool {
+	return resp.StatusCode == 200 || resp.StatusCode == 201 || resp.StatusCode == 204
 }
 
 func (c *Client) secureRequest(request RequestInterface) {
