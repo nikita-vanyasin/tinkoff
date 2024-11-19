@@ -19,7 +19,7 @@ type Payment struct {
 	PaymentID    string `json:"PaymentId"`
 	Amount       uint64 `json:"Amount,omitempty"`            // Стоимость товара в копейках
 	Status       string `json:"Status"`            // Статус платежа
-	RRN          string `json:"RRN"`               // Внутренний номер операции в платежной системе — кроме операций по СБП.
+	RRN          string `json:"RRN,omitempty"`               // Внутренний номер операции в платежной системе — кроме операций по СБП.
 	Success      bool   `json:"Success"`           // Успешность операции
 	ErrorCode    string `json:"ErrorCode"`         // Код ошибки, «0» - если успешно
 	ErrorMessage string `json:"Message,omitempty"` // Краткое описание ошибки
