@@ -21,7 +21,7 @@ type PaymentsCheckOrder struct {
 	Status       string `json:"Status"`            // Статус платежа
 	RRN          string `json:"RRN,omitempty"`     // Внутренний номер операции в платежной системе — кроме операций по СБП.
 	Success      bool   `json:"Success"`           // Успешность операции
-	ErrorCode    uint64 `json:"ErrorCode"`         // Код ошибки, «0» - если успешно
+	ErrorCode    string `json:"ErrorCode"`         // Код ошибки, «0» - если успешно
 	ErrorMessage string `json:"Message,omitempty"` // Краткое описание ошибки
 }
 
