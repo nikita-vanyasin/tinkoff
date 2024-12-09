@@ -5,7 +5,8 @@ const (
 	StatusFormShowed      = "FORM_SHOWED"      // Платежная форма открыта покупателем
 	StatusDeadlineExpired = "DEADLINE_EXPIRED" // Просрочен
 	StatusCanceled        = "CANCELED"         // Отменен
-	// not used. removal was not documented
+	// deprecated
+	// it was removed from API
 	StatusPreauthorizing  = "PREAUTHORIZING"   // Проверка платежных данных
 	StatusAuthorizing     = "AUTHORIZING"      // Резервируется
 	StatusAuthorized      = "AUTHORIZED"       // Зарезервирован
