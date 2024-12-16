@@ -19,9 +19,18 @@ func (i *ChargeRequest) GetValuesForToken() map[string]string {
 	v := map[string]string{
 		"PaymentId": i.PaymentId,
 		"RebillId":  i.RebillId,
-		"IP":        i.IP,
-		"SendEmail": serializeBool(i.SendEmail),
-		"InfoEmail": i.InfoEmail,
+		//"IP":        i.IP,
+		//"SendEmail": serializeBool(i.SendEmail),
+		//"InfoEmail": i.InfoEmail,
+	}
+	if i.IP != "" {
+		v["IP"] = i.IP
+	}
+	if i.SendEmail {
+		v["SendEmail"] = serializeBool(i.SendEmail)
+	}
+	if i.InfoEmail != "" {
+		v["InfoEmail"] = i.InfoEmail
 	}
 	return v
 }
@@ -41,6 +50,11 @@ func (c *Client) Charge(request *ChargeRequest) (*ChargeResponse, error) {
 
 // ChargeWithContext проводит рекуррентный (повторный) платеж
 func (c *Client) ChargeWithContext(ctx context.Context, request *ChargeRequest) (*ChargeResponse, error) {
+	if request.SendEmail == true {
+		if request.InfoEmail == "" {
+			return nil, fmt.Errorf("InfoEmail is empty")
+		}
+	}
 	response, err := c.PostRequestWithContext(ctx, "/Charge", request)
 	if err != nil {
 		return nil, err
@@ -54,7 +68,7 @@ func (c *Client) ChargeWithContext(ctx context.Context, request *ChargeRequest) 
 	}
 
 	err = res.Error()
-	if res.Status != StatusNew {
+	if res.Status != StatusConfirmed {
 		err = errorConcat(err, fmt.Errorf("unexpected payment status: %s", res.Status))
 	}
 
