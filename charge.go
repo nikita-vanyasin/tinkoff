@@ -19,9 +19,6 @@ func (i *ChargeRequest) GetValuesForToken() map[string]string {
 	v := map[string]string{
 		"PaymentId": i.PaymentId,
 		"RebillId":  i.RebillId,
-		//"IP":        i.IP,
-		//"SendEmail": serializeBool(i.SendEmail),
-		//"InfoEmail": i.InfoEmail,
 	}
 	if i.IP != "" {
 		v["IP"] = i.IP
