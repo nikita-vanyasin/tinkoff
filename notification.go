@@ -16,7 +16,7 @@ type Notification struct {
 	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа. В случае нотификаций банк присылает число, а не строку, как в случае с Init или Cancel
 	ErrorCode      string            `json:"ErrorCode"`   // Код ошибки, если произошла ошибка
 	Amount         uint64            `json:"Amount"`      // Текущая сумма транзакции в копейках
-	RebillID       string            `json:"RebillId"`    // Идентификатор рекуррентного платежа
+	RebillID       uint64            `json:"RebillId"`    // Идентификатор рекуррентного платежа
 	CardID         uint64            `json:"CardId"`      // Идентификатор привязанной карты
 	PAN            string            `json:"Pan"`         // Маскированный номер карты
 	DataStr        string            `json:"DATA"`
@@ -46,8 +46,8 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		result["DATA"] = n.DataStr
 	}
 
-	if n.RebillID != "" {
-		result["RebillId"] = n.RebillID
+	if n.RebillID != 0 {
+		result["RebillId"] = strconv.FormatUint(n.RebillID, 10)
 	}
 
 	return result
