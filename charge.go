@@ -8,8 +8,8 @@ import (
 type ChargeRequest struct {
 	BaseRequest
 
-	PaymentId string `json:"PaymentId,omitempty"` // Уникальный идентификатор транзакции в системе Т‑Кассы
-	RebillId  string `json:"RebillId,omitempty"`  // Идентификатор рекуррентного платежа
+	PaymentID string `json:"PaymentId,omitempty"` // Уникальный идентификатор транзакции в системе Т‑Кассы
+	RebillID  string `json:"RebillId,omitempty"`  // Идентификатор рекуррентного платежа
 	IP        string `json:"IP,omitempty"`        // IP-адрес клиента
 	SendEmail bool   `json:"SendEmail,omitempty"` // true — если клиент хочет получать уведомления на почту.
 	InfoEmail string `json:"InfoEmail,omitempty"` // Адрес почты клиента. Обязателен при передаче SendEmail
@@ -17,8 +17,8 @@ type ChargeRequest struct {
 
 func (i *ChargeRequest) GetValuesForToken() map[string]string {
 	v := map[string]string{
-		"PaymentId": i.PaymentId,
-		"RebillId":  i.RebillId,
+		"PaymentId": i.PaymentID,
+		"RebillId":  i.RebillID,
 	}
 	if i.IP != "" {
 		v["IP"] = i.IP
