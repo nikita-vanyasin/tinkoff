@@ -20,7 +20,7 @@ func TestClient_ParseNotification(t *testing.T) {
 			name: "with_rebill",
 			client: tinkoff.NewClientWithOptions(
 				tinkoff.WithTerminalKey("1726675329428DEMO"),
-				tinkoff.WithPassword("0x6sliXzI4fMbxxx"),
+				tinkoff.WithPassword("xxxxxxxxxxxxxxxx"),
 			),
 			body: []byte(`{
 				"TerminalKey": "1726675329428DEMO",
@@ -34,7 +34,7 @@ func TestClient_ParseNotification(t *testing.T) {
 				"Pan": "430000******0777",
 				"ExpDate": "1230",
 				"RebillId": 1741204285536,
-				"Token": "c0b3457bd4822b3cc823a9eb8d6b33733fb3225e4fb7b7039e5807987502648f"
+				"Token": "16cfc8cd6e8f8fc1d404e3f9984c8058ecdf6eab622a9cc73c2e3824e47124ac"
 			}`),
 			want: &tinkoff.Notification{
 				TerminalKey:    "1726675329428DEMO",
@@ -44,12 +44,13 @@ func TestClient_ParseNotification(t *testing.T) {
 				PaymentID:      5974256058,
 				ErrorCode:      "0",
 				Amount:         19900,
-				RebillID:       1741204285536,
+				RebillID:       "1741204285536",
+				RebillIDUInt64: 1741204285536,
 				CardID:         475738102,
 				PAN:            "430000******0777",
 				DataStr:        "",
 				Data:           nil,
-				Token:          "c0b3457bd4822b3cc823a9eb8d6b33733fb3225e4fb7b7039e5807987502648f",
+				Token:          "16cfc8cd6e8f8fc1d404e3f9984c8058ecdf6eab622a9cc73c2e3824e47124ac",
 				ExpirationDate: "1230",
 			},
 		},
