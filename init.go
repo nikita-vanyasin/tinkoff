@@ -45,6 +45,7 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 		"IP":              i.ClientIP,
 		"Description":     i.Description,
 		"Language":        i.Language,
+		"Recurrent":       i.Recurrent,
 		"CustomerKey":     i.CustomerKey,
 		"RedirectDueDate": i.RedirectDueDate.String(),
 		"NotificationURL": i.NotificationURL,
