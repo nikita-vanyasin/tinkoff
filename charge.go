@@ -47,7 +47,7 @@ func (c *Client) Charge(request *ChargeRequest) (*ChargeResponse, error) {
 
 // ChargeWithContext проводит рекуррентный (повторный) платеж
 func (c *Client) ChargeWithContext(ctx context.Context, request *ChargeRequest) (*ChargeResponse, error) {
-	if request.SendEmail == true {
+	if request.SendEmail {
 		if request.InfoEmail == "" {
 			return nil, fmt.Errorf("InfoEmail is empty")
 		}
