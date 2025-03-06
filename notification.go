@@ -16,7 +16,8 @@ type Notification struct {
 	PaymentID      uint64            `json:"PaymentId"`   // Уникальный идентификатор платежа. В случае нотификаций банк присылает число, а не строку, как в случае с Init или Cancel
 	ErrorCode      string            `json:"ErrorCode"`   // Код ошибки, если произошла ошибка
 	Amount         uint64            `json:"Amount"`      // Текущая сумма транзакции в копейках
-	RebillID       string            `json:"RebillId"`    // Идентификатор рекуррентного платежа
+	RebillID       string            `json:"-"`           // Deprecated, use RebillIDUInt64 instead
+	RebillIDUInt64 uint64            `json:"RebillId"`    // Идентификатор рекуррентного платежа
 	CardID         uint64            `json:"CardId"`      // Идентификатор привязанной карты
 	PAN            string            `json:"Pan"`         // Маскированный номер карты
 	DataStr        string            `json:"DATA"`
@@ -46,8 +47,8 @@ func (n *Notification) GetValuesForToken() map[string]string {
 		result["DATA"] = n.DataStr
 	}
 
-	if n.RebillID != "" {
-		result["RebillId"] = n.RebillID
+	if n.RebillIDUInt64 != 0 {
+		result["RebillId"] = strconv.FormatUint(n.RebillIDUInt64, 10)
 	}
 
 	return result
@@ -64,6 +65,8 @@ func (c *Client) ParseNotification(requestBody io.Reader) (*Notification, error)
 	if err != nil {
 		return nil, err
 	}
+
+	notification.RebillID = strconv.FormatUint(notification.RebillIDUInt64, 10)
 
 	if c.terminalKey != notification.TerminalKey {
 		return nil, errors.New("invalid terminal key")

@@ -50,6 +50,7 @@ func (i *InitRequest) GetValuesForToken() map[string]string {
 		"NotificationURL": i.NotificationURL,
 		"SuccessURL":      i.SuccessURL,
 		"FailURL":         i.FailURL,
+		"Recurrent":       i.Recurrent,
 	}
 	serializeUintToMapIfNonEmpty(&v, "Amount", i.Amount)
 	return v
